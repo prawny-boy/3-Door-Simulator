@@ -59,13 +59,13 @@ def UserSimulation(doorNum:int, roundNum:int):
                 print(i, end=", ")
             else:
                 print(str(i)+".")
-    result = GetResult(PrintFunctions.LimitedInput(["switch", "stay", "sw", "st"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
-    
-        
+    result = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
 
 # Menu
 
 # Main Code
+# print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
 UserSimulation(10,1)
