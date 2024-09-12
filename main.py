@@ -37,7 +37,15 @@ def RevealDoor(doorRevealCount:int, chosenDoor:int, roomDict:dict):
     return doorsRevealed
 
 def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
-    pass
+    if type == "switch":
+        finalDoor = list(set(roomDict.keys()) - set(revealedDoors))
+        finalDoor.remove(chosenDoor)
+        finalDoor = int(finalDoor[0])
+    elif type == "stay":
+        finalDoor = chosenDoor
+    else:
+        print("Error. Type is not Switch or Stay. [GetResult]")
+    return roomDict[finalDoor] == 1
 
 def UserSimulation(doorNum:int, roundNum:int):
     cprint("#Round "+str(roundNum), "green")
@@ -60,6 +68,7 @@ def UserSimulation(doorNum:int, roundNum:int):
             else:
                 print(str(i)+".")
     result = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+    print(result)
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
