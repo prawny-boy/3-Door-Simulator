@@ -7,8 +7,19 @@ from termcolor import cprint, colored
 # Variables
 numberOfGoodDoors = 1
 unknownDoorAmount = 2
+roundCount = 0
+doorFirstChoices = []
+actions = []
+outcomes = []
 
 # Functions
+def ResetGlobalVariables():
+    global roundCount, doorFirstChoices, actions, outcomes
+    roundCount = 0
+    doorFirstChoices = []
+    actions = []
+    outcomes = []
+
 def GenerateRoom(doorNum:int, donkeyCount:int):
     doorDict = {i+1:0 for i in range(doorNum)}
     doorList = list(doorDict.keys())
@@ -47,32 +58,37 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
         print("Error. Type is not Switch or Stay. [GetResult]")
     return tuple([roomDict[finalDoor] == 1, finalDoor, type])
 
-def UserSimulation(doorNum:int, roundNum:int):
-    cprint("#Round "+str(roundNum), "green")
-    roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
-    chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
-    doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
-    print()
-    if len(doorsToBeRevealed) > 10:
-        for i in range(1, len(roomDict)+1):
-            if i not in doorsToBeRevealed and i != chosenDoor:
-                print(f"Door {i} may be the prize door.")
-                break
-    elif len(doorsToBeRevealed) == 1:
-        print(f"Goat is in door {doorsToBeRevealed[0]}")
-    else:
-        print("Goats are in doors:", end=" ")
-        for i in doorsToBeRevealed:
-            if not i == doorsToBeRevealed[-1]:
-                print(i, end=", ")
-            else:
-                print(str(i)+".")
-    result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
-    if result:
-        print(f"Door {finalDoor} has the Prize! You Win!")
-    else:
-        print(f"Door {finalDoor} had the Goat. Too Bad.")
-    
+def UserSimulation(doorNum:int):
+    roundNum = 0
+    while True:
+        roundNum += 1
+        cprint("#Round "+str(roundNum), "green")
+        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
+        chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
+        doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
+        print()
+        if len(doorsToBeRevealed) > 10:
+            for i in range(1, len(roomDict)+1):
+                if i not in doorsToBeRevealed and i != chosenDoor:
+                    print(f"Door {i} may be the prize door.")
+                    break
+        elif len(doorsToBeRevealed) == 1:
+            print(f"Goat is in door {doorsToBeRevealed[0]}")
+        else:
+            print("Goats are in doors:", end=" ")
+            for i in doorsToBeRevealed:
+                if not i == doorsToBeRevealed[-1]:
+                    print(i, end=", ")
+                else:
+                    print(str(i)+".")
+        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+        if result:
+            print(f"Door {finalDoor} has the Prize! You Win!")
+        else:
+            print(f"Door {finalDoor} had the Goat. Too Bad.")
+        
+        break
+    return tuple([chosenDoor, action, result])
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
@@ -81,4 +97,6 @@ def SilentSimulation(doorNum:int, simulationTimes:int):
 
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-UserSimulation(3,1)
+
+ResetGlobalVariables()
+UserSimulation(3)

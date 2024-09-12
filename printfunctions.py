@@ -30,3 +30,11 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
         else:
             cprint(error, errorcolour, attrs=errorattrs)
     return answer
+
+def printTable(data:list[list], tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"]):
+    # get the longest data/title
+    cprint(tableTitle, attrs=["bold"])
+    print()
+    # print the table with a 2 space buffer from the longest data/title
+    # titles with underline
+    pass
