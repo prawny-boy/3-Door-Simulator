@@ -11,6 +11,7 @@ roundCount = 0
 doorFirstChoices = []
 actions = []
 outcomes = []
+playingType = None
 
 # Functions
 
@@ -91,13 +92,25 @@ def UserSimulation(doorNum:int):
         print()
         if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
             break
+    print("\n")
     PrintFunctions.PrintTable([list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults], roundNum)
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
 
 # Menu
-
+playingType = None
+while True:
+    command = int(PrintFunctions.LimitedInput(["1", "2"], """Enter a command:
+1. Play
+2. Customisation"""))
+    if command == 1:
+        break
+        # start mode selection
+    elif command == 2:
+        pass
+        # customisation options
+    
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
 print(UserSimulation(3))
