@@ -1,6 +1,6 @@
 import random
 import sys
-import printfunctions
+import PrintFunctions
 
 # Variables
 numberOfGoodDoors = 1
@@ -16,11 +16,15 @@ def GenerateRoom(doorNum:int, donkeyCount:int):
     print(doorDict)
     return doorDict
 
-def UserSimulation(doorNum:int, usered:bool, simulation_times:int):
+def RevealDoor(doorRevealCount, chosenDoor):
+    pass
+
+def UserSimulation(doorNum:int, simulation_times:int):
     for i in range(simulation_times):
-        GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
+        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
+        chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door"))
 
 # Menu
 
 # Main Code
-GenerateRoom(100,99)
+UserSimulation(3, 1)
