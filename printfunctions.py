@@ -8,7 +8,7 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
     cprint("Options:", end=" ", attrs=["bold"])
     for i in range(len(choices)):
         if i == len(choices) - 1:
-            print(str(choices[i])+".")
+            print(str(choices[i]))
         else:
             print(str(choices[i]), end=promptseperator)
     numberChoices = []

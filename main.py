@@ -45,12 +45,12 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
         finalDoor = chosenDoor
     else:
         print("Error. Type is not Switch or Stay. [GetResult]")
-    return roomDict[finalDoor] == 1
+    return tuple([roomDict[finalDoor] == 1, finalDoor, type])
 
 def UserSimulation(doorNum:int, roundNum:int):
     cprint("#Round "+str(roundNum), "green")
     roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
-    chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door"))
+    chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
     doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
     print()
     if len(doorsToBeRevealed) > 10:
@@ -59,7 +59,7 @@ def UserSimulation(doorNum:int, roundNum:int):
                 print(f"Door {i} may be the prize door.")
                 break
     elif len(doorsToBeRevealed) == 1:
-        print(f"Goat is in door {i}")
+        print(f"Goat is in door {doorsToBeRevealed[0]}")
     else:
         print("Goats are in doors:", end=" ")
         for i in doorsToBeRevealed:
@@ -67,8 +67,12 @@ def UserSimulation(doorNum:int, roundNum:int):
                 print(i, end=", ")
             else:
                 print(str(i)+".")
-    result = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
-    print(result)
+    result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+    if result:
+        print(f"Door {finalDoor} has the Prize! You Win!")
+    else:
+        print(f"Door {finalDoor} had the Goat. Too Bad.")
+    
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
@@ -77,4 +81,4 @@ def SilentSimulation(doorNum:int, simulationTimes:int):
 
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-UserSimulation(10,1)
+UserSimulation(3,1)
