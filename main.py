@@ -29,21 +29,43 @@ def RevealDoor(doorRevealCount:int, chosenDoor:int, roomDict:dict):
             if roomDict[revealed] == 0:
                 break
             else:
-                list(revealableDoors).remove(revealed)
+                revealableDoors.remove(revealed)
                 continue
-        list(revealableDoors).remove(revealed)
+        revealableDoors.remove(revealed)
         doorsRevealed.append(revealed)
+    doorsRevealed.sort()
     return doorsRevealed
 
-def UserSimulation(doorNum:int, simulation_times:int):
-    for i in range(simulation_times):
-        cprint("#Round"+str(i), "green")
-        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
-        chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door"))
-        doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
-        print(doorsToBeRevealed)
+def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
+    pass
+
+def UserSimulation(doorNum:int, roundNum:int):
+    cprint("#Round "+str(roundNum), "green")
+    roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
+    chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door"))
+    doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
+    print()
+    if len(doorsToBeRevealed) > 10:
+        for i in range(1, len(roomDict)+1):
+            if i not in doorsToBeRevealed and i != chosenDoor:
+                print(f"Door {i} may be the prize door.")
+                break
+    elif len(doorsToBeRevealed) == 1:
+        print(f"Goat is in door {i}")
+    else:
+        print("Goats are in doors:", end=" ")
+        for i in doorsToBeRevealed:
+            if not i == doorsToBeRevealed[-1]:
+                print(i, end=", ")
+            else:
+                print(str(i)+".")
+    result = GetResult(PrintFunctions.LimitedInput(["switch", "stay", "sw", "st"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+    
+        
+def SilentSimulation(doorNum:int, simulationTimes:int):
+    pass
 
 # Menu
 
 # Main Code
-UserSimulation(3, 1)
+UserSimulation(10,1)
