@@ -13,12 +13,6 @@ actions = []
 outcomes = []
 
 # Functions
-def ResetGlobalVariables():
-    global roundCount, doorFirstChoices, actions, outcomes
-    roundCount = 0
-    doorFirstChoices = []
-    actions = []
-    outcomes = []
 
 def GenerateRoom(doorNum:int, donkeyCount:int):
     doorDict = {i+1:0 for i in range(doorNum)}
@@ -60,8 +54,12 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
 
 def UserSimulation(doorNum:int):
     roundNum = 0
+    allFirstChoices = []
+    allActions = []
+    allResults = []
     while True:
         roundNum += 1
+        print("-"*20)
         cprint("#Round "+str(roundNum), "green")
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
@@ -81,14 +79,19 @@ def UserSimulation(doorNum:int):
                     print(i, end=", ")
                 else:
                     print(str(i)+".")
-        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["switch", "stay"], "Do you want to switch or stay:"), doorsToBeRevealed, chosenDoor, roomDict)
+        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], "Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
         if result:
             print(f"Door {finalDoor} has the Prize! You Win!")
         else:
             print(f"Door {finalDoor} had the Goat. Too Bad.")
         
-        break
-    return tuple([chosenDoor, action, result])
+        allFirstChoices.append(chosenDoor)
+        allActions.append(0 if action == "stay" else 1) # 0 for stay, 1 for switch
+        allResults.append(result)
+        
+        if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
+            break
+    return tuple([allFirstChoices, allActions, allResults])
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
@@ -97,6 +100,4 @@ def SilentSimulation(doorNum:int, simulationTimes:int):
 
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-
-ResetGlobalVariables()
 UserSimulation(3)
