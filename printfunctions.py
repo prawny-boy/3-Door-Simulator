@@ -31,10 +31,25 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
             cprint(error, errorcolour, attrs=errorattrs)
     return answer
 
-def printTable(data:list[list], tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"]):
-    # get the longest data/title
+def PrintTable(data:list[list], roundCount:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
+    longestString = 0
+    data.append(titles)
+    for lists in data:
+        for value in lists:
+            if len(str(value)) > longestString:
+                longestString = len(str(value))
+    data.remove(titles)
     cprint(tableTitle, attrs=["bold"])
-    print()
-    # print the table with a 2 space buffer from the longest data/title
-    # titles with underline
-    pass
+    print("")
+    for title in titles:
+        print(colored(title, attrs=["underline"]), end=" "*(longestString-len(str(title))+tableBuffer))
+    print("")
+    for i in range(roundCount):
+        for l in data:
+            try:
+                value = l[i]
+            except IndexError:
+                value = ""
+            print(str(value), end=" "*(longestString-len(str(value))+tableBuffer))
+        print("")
+    print("")

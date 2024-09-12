@@ -21,7 +21,6 @@ def GenerateRoom(doorNum:int, donkeyCount:int):
         goodDoor = random.choice(doorList)
         doorDict[goodDoor] = 1
         doorList.remove(goodDoor)
-    print(doorDict)
     return doorDict
 
 def RevealDoor(doorRevealCount:int, chosenDoor:int, roomDict:dict):
@@ -86,12 +85,13 @@ def UserSimulation(doorNum:int):
             print(f"Door {finalDoor} had the Goat. Too Bad.")
         
         allFirstChoices.append(chosenDoor)
-        allActions.append(0 if action == "stay" else 1) # 0 for stay, 1 for switch
-        allResults.append(result)
+        allActions.append(action.capitalize()) # 0 for stay, 1 for switch
+        allResults.append("Win" if result else "Lose")
         
+        print()
         if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
             break
-    return tuple([allFirstChoices, allActions, allResults])
+    PrintFunctions.PrintTable([list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults], roundNum)
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
@@ -100,4 +100,4 @@ def SilentSimulation(doorNum:int, simulationTimes:int):
 
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-UserSimulation(3)
+print(UserSimulation(3))
