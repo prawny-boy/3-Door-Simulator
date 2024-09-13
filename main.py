@@ -15,10 +15,10 @@ playingType = None
 
 # Functions
 
-def GenerateRoom(doorNum:int, donkeyCount:int):
+def GenerateRoom(doorNum:int, goatCount:int):
     doorDict = {i+1:0 for i in range(doorNum)}
     doorList = list(doorDict.keys())
-    for i in range(doorNum-donkeyCount):
+    for i in range(doorNum-goatCount):
         goodDoor = random.choice(doorList)
         doorDict[goodDoor] = 1
         doorList.remove(goodDoor)
@@ -79,7 +79,7 @@ def UserSimulation(doorNum:int):
                     print(i, end=", ")
                 else:
                     print(str(i)+".")
-        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], "Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
+        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], f"Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
         if result:
             print(f"Door {finalDoor} has the Prize! You Win!")
         else:
