@@ -136,13 +136,11 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
 # Menu
 playingType = None
 while True:
-    command = int(PrintFunctions.LimitedInput(["1", "2"], """Enter a command:
-1. Play
-2. Customisation"""))
-    if command == 1:
+    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation"}, "Enter a command:")).lower()
+    if command == "play":
         break
         # start mode selection
-    elif command == 2:
+    elif command == "customisation":
         pass
         # customisation options
     

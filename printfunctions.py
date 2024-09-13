@@ -57,8 +57,9 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
         else:
             cprint(error, "red", attrs=["bold"])
     answer = choices[answer]
-    print(f"Selected {answer}")
+    cprint(f"Selected {answer}", "green")
     return answer
+
 def PrintTable(data:list[list], tableLength:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
     longestString = 0
     data.append(titles)
