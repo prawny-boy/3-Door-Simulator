@@ -31,7 +31,7 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
             cprint(error, errorcolour, attrs=errorattrs)
     return answer
 
-def PrintTable(data:list[list], roundCount:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
+def PrintTable(data:list[list], tableLength:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
     longestString = 0
     data.append(titles)
     for lists in data:
@@ -44,7 +44,7 @@ def PrintTable(data:list[list], roundCount:int, tableTitle:str="RESULTS TABLE", 
     for title in titles:
         print(colored(title, attrs=["underline"]), end=" "*(longestString-len(str(title))+tableBuffer))
     print("")
-    for i in range(roundCount):
+    for i in range(tableLength):
         for l in data:
             try:
                 value = l[i]

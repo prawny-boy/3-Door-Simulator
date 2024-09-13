@@ -99,22 +99,29 @@ def UserSimulation(doorNum:int):
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
 
-def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
+def PrintResults(allRounds:list, 
+                 allFirstChoices:list, 
+                 allActions:list, 
+                 allResults:list, 
+                 amountOfRounds:int, 
+                 extendedInfo:bool=False,
+                 doorAmount:int=3,
+                 ):    
     tableData = [allRounds, allFirstChoices, allActions, allResults]
     PrintFunctions.PrintTable(tableData, amountOfRounds)
-    winsCount = allResults.count(True)
-    lossesCount = allResults.count(False)
+    winsCount = allResults.count("Win")
+    lossesCount = allResults.count("Lose")
     stayCount = allActions.count("Stay")
     switchCount = allActions.count("Switch")
     switchWinCount, switchLossCount, stayWinCount, stayLossCount = 0, 0, 0, 0
     for i in range(amountOfRounds):
         if allActions[i] == "Switch":
-            if allResults[i]:
+            if allResults[i] == "Win":
                 switchWinCount += 1
             else:
                 switchLossCount += 1
         elif allActions[i] == "Stay":
-            if allResults[i]:
+            if allResults[i] == "Win":
                 stayWinCount += 1
             else:
                 stayLossCount += 1
