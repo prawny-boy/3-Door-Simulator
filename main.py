@@ -135,14 +135,26 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
 
 # Menu
 playingType = None
+print("-------------------------------------------------------------------")
+cprint("The 3-door Problem/Monty Hall Problem Simulator", attrs=["bold", "underline"])
+cprint("By Sean Chan", attrs=["bold"])
+cprint("Disclaimer: This was made for a school project. Do not take seriously.")
+print("-------------------------------------------------------------------\n")
 while True:
-    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation"}, "Enter a command:")).lower()
+    command = None
+    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "i": "Instructions/Help"}, "Enter a command:")).lower()
     if command == "play":
-        break
-        # start mode selection
+        command = str(PrintFunctions.ListedInput({"p": "Interactive Simulation", "c": "Silent Simulation"}, "Pick type of simulation:")).lower()
+        if command == "interactive simulation":
+            UserSimulation(3)
+        elif command == "silent simulation":
+            pass
     elif command == "customisation":
         pass
         # customisation options
+    elif command == "instructions/help":
+        pass
+        # instructions/help
     
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))

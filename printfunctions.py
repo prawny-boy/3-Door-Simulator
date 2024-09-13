@@ -51,13 +51,14 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
             valid = True
         if answer in ["q", "quit"]:
             valid = False
+            cprint("Selected Quit Program", "green")
             sys.exit()
         if valid:
             break
         else:
             cprint(error, "red", attrs=["bold"])
     answer = choices[answer]
-    cprint(f"Selected {answer}", "green")
+    cprint(f"Selected {answer}\n", "green")
     return answer
 
 def PrintTable(data:list[list], tableLength:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
