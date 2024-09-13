@@ -7,6 +7,7 @@ from termcolor import cprint, colored
 # Variables
 numberOfGoodDoors = 1
 unknownDoorAmount = 2
+extendedResults = False
 roundCount = 0
 doorFirstChoices = []
 actions = []
@@ -68,17 +69,17 @@ def UserSimulation(doorNum:int):
         if len(doorsToBeRevealed) > 10:
             for i in range(1, len(roomDict)+1):
                 if i not in doorsToBeRevealed and i != chosenDoor:
-                    print(f"Door {i} may be the prize door.")
+                    print(f"Door {i} may be the prize door.\n")
                     break
         elif len(doorsToBeRevealed) == 1:
-            print(f"Goat is in door {doorsToBeRevealed[0]}")
+            print(f"Goat is in door {doorsToBeRevealed[0]}\n")
         else:
             print("Goats are in doors:", end=" ")
             for i in doorsToBeRevealed:
                 if not i == doorsToBeRevealed[-1]:
                     print(i, end=", ")
                 else:
-                    print(str(i)+".")
+                    print(str(i)+".\n")
         result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], f"Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
         if result:
             print(f"Door {finalDoor} has the Prize! You Win!")
@@ -86,17 +87,51 @@ def UserSimulation(doorNum:int):
             print(f"Door {finalDoor} had the Goat. Too Bad.")
         
         allFirstChoices.append(chosenDoor)
-        allActions.append(action.capitalize()) # 0 for stay, 1 for switch
+        allActions.append(action.capitalize())
         allResults.append("Win" if result else "Lose")
         
         print()
         if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
             break
     print("\n")
-    PrintFunctions.PrintTable([list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults], roundNum)
+    PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
+
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
+    tableData = [allRounds, allFirstChoices, allActions, allResults]
+    PrintFunctions.PrintTable(tableData, amountOfRounds)
+    winsCount = allResults.count(True)
+    lossesCount = allResults.count(False)
+    stayCount = allActions.count("Stay")
+    switchCount = allActions.count("Switch")
+    switchWinCount, switchLossCount, stayWinCount, stayLossCount = 0, 0, 0, 0
+    for i in range(amountOfRounds):
+        if allActions[i] == "Switch":
+            if allResults[i]:
+                switchWinCount += 1
+            else:
+                switchLossCount += 1
+        elif allActions[i] == "Stay":
+            if allResults[i]:
+                stayWinCount += 1
+            else:
+                stayLossCount += 1
+
+    cprint("SUMMARY\n", attrs=["bold"])
+    cprint(f"Wins with switch: {switchWinCount}")
+    cprint(f"Wins with stay: {stayWinCount}\n")
+    print(f"Pr(Winning with switch): {switchWinCount/amountOfRounds*100}%")
+    print(f"Pr(Winning with stay): {stayWinCount/amountOfRounds*100}%\n")
+
+    if extendedInfo:
+        cprint("EXTENDED INFO\n", attrs=["bold"])
+        print(f"Wins: {winsCount}, {winsCount/amountOfRounds*100}%")
+        print(f"Losses: {lossesCount}, {lossesCount/amountOfRounds*100}%\n")
+        print(f"Losses with switch: {switchLossCount}, {switchLossCount/amountOfRounds*100}%")
+        print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%")
+
 
 # Menu
 playingType = None
@@ -113,4 +148,4 @@ while True:
     
 # Main Code
 # print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-print(UserSimulation(3))
+UserSimulation(3)
