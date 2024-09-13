@@ -99,14 +99,7 @@ def UserSimulation(doorNum:int):
 def SilentSimulation(doorNum:int, simulationTimes:int):
     pass
 
-def PrintResults(allRounds:list, 
-                 allFirstChoices:list, 
-                 allActions:list, 
-                 allResults:list, 
-                 amountOfRounds:int, 
-                 extendedInfo:bool=False,
-                 doorAmount:int=3,
-                 ):    
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
     tableData = [allRounds, allFirstChoices, allActions, allResults]
     PrintFunctions.PrintTable(tableData, amountOfRounds)
     winsCount = allResults.count("Win")

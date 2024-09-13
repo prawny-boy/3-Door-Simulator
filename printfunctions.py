@@ -31,6 +31,34 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
             cprint(error, errorcolour, attrs=errorattrs)
     return answer
 
+def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", choiceseperator=" | ", error="Invalid. Please try again."):
+    cprint(prompt, "yellow", attrs=["bold"])
+    for i in range(len(choices.keys())):
+        print(str(list(choices.keys())[i])+choiceseperator+str(choices[list(choices.keys())[i]]))
+    numberChoices = []
+    for i in range(len(choices.keys())):
+        numberChoices.append(str(i+1))
+    while True:
+        answer = input(": ").lower()
+        valid = True
+        if answer not in choices.keys():
+            valid = False
+        if answer in choices.values():
+            valid = True
+            answer = list(choices.keys())[list(choices.values()).index(answer)]
+        if answer in numberChoices:
+            answer = list(choices.keys())[int(answer)-1]
+            valid = True
+        if answer in ["q", "quit"]:
+            valid = False
+            sys.exit()
+        if valid:
+            break
+        else:
+            cprint(error, "red", attrs=["bold"])
+    answer = choices[answer]
+    print(f"Selected {answer}")
+    return answer
 def PrintTable(data:list[list], tableLength:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
     longestString = 0
     data.append(titles)
