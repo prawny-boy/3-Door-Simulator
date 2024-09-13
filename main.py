@@ -7,6 +7,8 @@ from termcolor import cprint, colored
 # Variables
 numberOfGoodDoors = 1
 unknownDoorAmount = 2
+amountOfDoors = 3
+maximumAmountOfDoors = 100
 extendedResults = False
 roundCount = 0
 doorFirstChoices = []
@@ -146,7 +148,8 @@ while True:
     if command == "play":
         command = str(PrintFunctions.ListedInput({"p": "Interactive Simulation", "c": "Silent Simulation"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
-            UserSimulation(3)
+            amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: ")
+            UserSimulation(amountOfDoors)
         elif command == "silent simulation":
             pass
     elif command == "customisation":

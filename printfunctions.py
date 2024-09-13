@@ -61,6 +61,27 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
     cprint(f"Selected {answer}\n", "green")
     return answer
 
+def RangedInput(start:int, end:int, prompt="Choose a number:", error="Invalid. Please try again."):
+    cprint(prompt, "yellow", attrs=["bold"])
+    while True:
+        try:
+            answer = int(input(f"Pick between {start} to {end}: "))
+        except:
+            cprint(error, "red", attrs=["bold"])
+            continue
+        valid = True
+        if answer < start or answer > end:
+            valid = False
+        if answer in ["q", "quit"]:
+            valid = False
+            sys.exit()
+        if valid:
+            break
+        else:
+            cprint(error, "red", attrs=["bold"])
+    cprint("Selected "+str(answer), "green")
+    return answer
+
 def PrintTable(data:list[list], tableLength:int, tableTitle:str="RESULTS TABLE", titles:list=["Round", "Choice", "Action", "Outcome"], tableBuffer:int=2):
     longestString = 0
     data.append(titles)
