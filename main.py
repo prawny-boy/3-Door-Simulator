@@ -146,7 +146,7 @@ while True:
     command = None
     command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "i": "Instructions/Help"}, "Enter a command:")).lower()
     if command == "play":
-        command = str(PrintFunctions.ListedInput({"p": "Interactive Simulation", "c": "Silent Simulation"}, "Pick type of simulation:")).lower()
+        command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
             amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: ")
             UserSimulation(amountOfDoors)
