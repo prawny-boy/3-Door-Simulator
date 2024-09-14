@@ -130,6 +130,28 @@ def RunDefaultSilentSimulations(simType, amountOfDoors):
         actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True)
         allActions += actions
         allResults += results
+        allFirstChoices += choices
+    PrintFunctions.PrintTable([list(i+1 for i in range(50)), allFirstChoices[:50], allActions[:50], allResults[:50]], 50, tableTitle="50 ROUND RESULTS TABLE")
+    print("\nThe rest were simulated silently...\n")
+
+    stayPrs, switchPrs = [], []
+    for i in range(len(simulationTimes)):
+        if not i == 0: before = simulationTimes[i-1]
+        else: before = 0
+        current = simulationTimes[i]
+        roundActions = allActions[before+1:current+before+1]
+        roundResults = allResults[before+1:current+before+1]
+        switchWins, stayWins = 0, 0
+        for s in range(len(roundActions)):
+            if roundResults[s] == "Win":
+                if roundActions[s] == "Stay":
+                    stayWins += 1
+                else:
+                    switchWins += 1
+        stayPrs.append(str(round(stayWins/len(roundActions)*100,2))+"%")
+        switchPrs.append(str(round(switchWins/len(roundActions)*100,2))+"%")
+
+    PrintFunctions.PrintTable([simulationTimes, switchPrs, stayPrs], 5, "SILENT SIMULATION RESULTS", ["Rounds", "Pr(Win with Switch)", "Pr(Win with Stay)"])
 
 def SilentSimulationMenu():
     print("Check info on types of Silent Simulation if you are struggling to understand.")
