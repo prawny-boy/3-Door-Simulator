@@ -235,7 +235,7 @@ while True:
     command = None
     command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "i": "Instructions/Help"}, "Enter a command:")).lower()
     if command == "play":
-        command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation", "f": "Update Files"}, "Pick type of simulation:")).lower()
+        command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation", "f": "Update Files", "p": "Previous"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
             amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: (Recommended: 3)")
             UserSimulation(amountOfDoors)
@@ -243,8 +243,10 @@ while True:
             SilentSimulationMenu()
         elif command == "update files":
             SilentFileUpdate()
+        elif command == "previous":
+            continue
     elif command == "customisation":
-        command = str(PrintFunctions.ListedInput({"c": "Clear files", "e": "Toggle Extended Results"}, "Enter a setting to edit:")).lower()
+        command = str(PrintFunctions.ListedInput({"c": "Clear files", "e": "Toggle Extended Results", "p": "Previous"}, "Enter a setting to edit:")).lower()
         if command == "clear files":
             files = ["part2_random.txt", "part3_stay.txt", "part4_switch.txt", "part5_ten_doors.txt"]
             for file in files:
@@ -253,6 +255,16 @@ while True:
         elif command == "toggle extended results":
             extendedResults = not extendedResults
             cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
+        elif command == "previous":
+            continue
     elif command == "instructions/help":
-        pass
-        # instructions/help
+        while True:
+            command = str(PrintFunctions.ListedInput({"b": "Background of the 3-Door Problem", "h": "How to Play", "p": "Previous"}, "Select a topic:")).lower()
+            if command == "background of the 3-door problem":
+                cprint("\nBACKGROUND\n", attrs=["bold"])
+                print("""""")
+            elif command == "how to play":
+                cprint("\nHOW TO PLAY\n", attrs=["bold"])
+                print("""""")
+            elif command == "previous":
+                break
