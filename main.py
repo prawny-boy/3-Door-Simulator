@@ -14,7 +14,6 @@ roundCount = 0
 doorFirstChoices = []
 actions = []
 outcomes = []
-playingType = None
 
 # Functions
 
