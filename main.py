@@ -119,7 +119,10 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         print(f'Progress: {round(r/simulationTimes*100, 2)}%'+'\r', end="")
     print("\n")
     if not runningDefaultSim:
-        PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+        if simulationTimes <= 100:
+            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+        else:
+            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults, False)
         return
     return allActions, allResults, allFirstChoices
 
@@ -171,9 +174,10 @@ def SilentSimulationMenu():
     else:
         SilentSimulations(amountOfDoors, amountOfSims, simType)
 
-def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):
-    tableData = [allRounds, allFirstChoices, allActions, allResults]
-    PrintFunctions.PrintTable(tableData, amountOfRounds)
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, table:bool=True):
+    if table:
+        tableData = [allRounds, allFirstChoices, allActions, allResults]
+        PrintFunctions.PrintTable(tableData, amountOfRounds)
     winsCount = allResults.count("Win")
     lossesCount = allResults.count("Lose")
     stayCount = allActions.count("Stay")
