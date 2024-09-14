@@ -245,17 +245,18 @@ while True:
         elif command == "previous":
             continue
     elif command == "customisation":
-        command = str(PrintFunctions.ListedInput({"c": "Clear files", "e": "Toggle Extended Results", "p": "Previous"}, "Enter a setting to edit:")).lower()
-        if command == "clear files":
-            files = ["part2_random.txt", "part3_stay.txt", "part4_switch.txt", "part5_ten_doors.txt"]
-            for file in files:
-                with open(file, "w") as f: f.truncate()
-            cprint("Files cleared successfully.\n", "green")
-        elif command == "toggle extended results":
-            extendedResults = not extendedResults
-            cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
-        elif command == "previous":
-            continue
+        while True:
+            command = str(PrintFunctions.ListedInput({"c": "Clear files", "e": "Toggle Extended Results", "p": "Previous"}, "Enter a setting to edit:")).lower()
+            if command == "clear files":
+                files = ["part2_random.txt", "part3_stay.txt", "part4_switch.txt", "part5_ten_doors.txt"]
+                for file in files:
+                    with open(file, "w") as f: f.truncate()
+                cprint("Files cleared successfully.\n", "green")
+            elif command == "toggle extended results":
+                extendedResults = not extendedResults
+                cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
+            elif command == "previous":
+                break
     elif command == "instructions/help":
         while True:
             command = str(PrintFunctions.ListedInput({"b": "Background of the 3-Door Problem", "h": "How to Play", "n": "Navigation Of This Program", "p": "Previous"}, "Select a topic:")).lower()
