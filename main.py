@@ -134,7 +134,7 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         print(f"Losses with switch: {switchLossCount}, {switchLossCount/amountOfRounds*100}%")
         print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%")
 
-
+# Main Code
 # Menu
 playingType = None
 print("-------------------------------------------------------------------")
@@ -158,7 +158,3 @@ while True:
     elif command == "instructions/help":
         pass
         # instructions/help
-    
-# Main Code
-# print(PrintFunctions.LimitedInput(["a", "b", "c"], "Select"))
-UserSimulation(3)
