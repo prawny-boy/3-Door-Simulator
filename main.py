@@ -209,6 +209,7 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
 
 def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
     with open(fileName, "w") as file:
+        file.truncate()
         file.write("Round,First Choice,Action,Result\n")
         for i in range(amountOfRounds):
             file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n")
