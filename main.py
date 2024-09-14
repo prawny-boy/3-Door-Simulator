@@ -56,6 +56,7 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
     return tuple([roomDict[finalDoor] == 1, finalDoor, type])
 
 def UserSimulation(doorNum:int):
+    print("Look up the info for Manual Simulation to know how to play.")
     roundNum = 0
     allFirstChoices = []
     allActions = []
@@ -95,11 +96,27 @@ def UserSimulation(doorNum:int):
         print()
         if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
             break
-    print("\n")
+    print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def SilentSimulation(doorNum:int, simulationTimes:int):
-    pass
+def rSilentSimulation(doorNum:int, simulationTimes:int):
+    print("Look up the info for Silent Simulation to know what this does.")
+    print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
+    print("Progress: 0%")
+    allFirstChoices = []
+    allActions = []
+    allResults = []
+    for i in range(simulationTimes):
+        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
+        chosenDoor = random.choice(list(roomDict.keys()))
+        doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
+        result, finalDoor, action = GetResult(random.choice(["stay", "switch"]), doorsToBeRevealed, chosenDoor, roomDict)
+        allFirstChoices.append(chosenDoor)
+        allActions.append(action.capitalize())
+        allResults.append("Win" if result else "Lose")
+        sys.stdout.write("\033[K")
+        print(f"Progress: {i+1/simulationTimes*100}%")
+    print("")
 
 def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
     tableData = [allRounds, allFirstChoices, allActions, allResults]
