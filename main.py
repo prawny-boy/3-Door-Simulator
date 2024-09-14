@@ -123,6 +123,7 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         if simulationTimes <= 100:
             PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
         else:
+            print("The table was not printed because it was too long.")
             PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults, False)
         return
     return allActions, allResults, allFirstChoices
@@ -207,7 +208,7 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         print(f"Wins: {winsCount}, {winsCount/amountOfRounds*100}%")
         print(f"Losses: {lossesCount}, {lossesCount/amountOfRounds*100}%\n")
         print(f"Losses with switch: {switchLossCount}, {switchLossCount/amountOfRounds*100}%")
-        print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%")
+        print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%\n")
 
 def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
     with open(fileName, "w") as file:
@@ -243,8 +244,15 @@ while True:
         elif command == "update files":
             SilentFileUpdate()
     elif command == "customisation":
-        pass
-        # customisation options
+        command = str(PrintFunctions.ListedInput({"c": "Clear files", "e": "Toggle Extended Results"}, "Enter a setting to edit:")).lower()
+        if command == "clear files":
+            files = ["part2_random.txt", "part3_stay.txt", "part4_switch.txt", "part5_ten_doors.txt"]
+            for file in files:
+                with open(file, "w") as f: f.truncate()
+            cprint("Files cleared successfully.\n", "green")
+        elif command == "toggle extended results":
+            extendedResults = not extendedResults
+            cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
     elif command == "instructions/help":
         pass
         # instructions/help
