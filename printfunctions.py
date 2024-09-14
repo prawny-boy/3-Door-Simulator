@@ -65,17 +65,27 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
     else:
         return answer
 
-def RangedInput(start:int, end:int, prompt="Choose a number:", error="Invalid. Please try again."):
+def RangedInput(start:int, end:int, prompt="Choose a number:", error="Invalid. Please try again.", infiniteEnd:bool=False):
+    if infiniteEnd:
+        end = "∞"
     cprint(prompt, "yellow", attrs=["bold"])
     while True:
+        answer = input(f"Pick between {start} to {end}: ")
+        if answer == "q" or answer == "quit":
+            cprint("Selected Quit Program", "green")
+            sys.exit()
         try:
-            answer = int(input(f"Pick between {start} to {end}: "))
+            answer = int(answer)
         except:
             cprint(error, "red", attrs=["bold"])
             continue
         valid = True
-        if answer < start or answer > end:
-            valid = False
+        if infiniteEnd:
+            if answer < start:
+                valid = False
+        else:
+            if answer < start or answer > end:
+                valid = False
         if answer in ["q", "quit"]:
             valid = False
             sys.exit()
