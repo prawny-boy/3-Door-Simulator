@@ -53,7 +53,7 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
         finalDoor = chosenDoor
     else:
         print("Error. Type is not Switch or Stay. [GetResult]")
-    return tuple([roomDict[finalDoor] == 1, finalDoor, type])
+    return tuple([roomDict[finalDoor] == 1, type])
 
 def UserSimulation(doorNum:int):
     print("Look up the info for Manual Simulation to know how to play.")
@@ -99,65 +99,59 @@ def UserSimulation(doorNum:int):
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", noTable:bool=False, noResults:bool=False):
-    print("Look up the info for Silent Simulation to know what this does.")
+def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False):
+    if simType == "always stay": actionRandomChoice = "stay"
+    elif simType == "always switch": actionRandomChoice = "switch"
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
     allFirstChoices = []
     allActions = []
     allResults = []
-    for i in range(simulationTimes):
+    allRounds = list(i+1 for i in range(simulationTimes))
+    for r in allRounds:
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = random.choice(list(roomDict.keys()))
         doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
-        if simType == "random choices":
-            actionRandomChoice = random.choice(["stay", "switch"])
-        elif simType == "always stay":
-            actionRandomChoice = "stay"
-        elif simType == "always switch":
-            actionRandomChoice = "switch"
-        else:
-            print("Error. Type is not Switch or Stay. [SilentSimulations]")
-        result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
+        if simType == "random choices": actionRandomChoice = random.choice(["stay", "switch"])
+        result, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
         allFirstChoices.append(chosenDoor)
         allActions.append(action.capitalize())
         allResults.append("Win" if result else "Lose")
-        print(f'Progress: {round((i+1)/simulationTimes*100, 1)}%'+'\r', end="")
+        print(f'Progress: {round(r/simulationTimes*100, 2)}%'+'\r', end="")
     print("\n")
-    if not noResults:
-        PrintResults(list(i+1 for i in range(simulationTimes)), allFirstChoices, allActions, allResults, simulationTimes, extendedResults, noTable)
+    if not runningDefaultSim:
+        PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+        return
+    return allActions, allResults, allFirstChoices
 
 def RunDefaultSilentSimulations(simType, amountOfDoors):
-    SilentSimulations(amountOfDoors, 50, simType, False, True)
-    SilentSimulations(amountOfDoors, 100, simType, False, False)
-    SilentSimulations(amountOfDoors, 1000, simType, False, False)
-    SilentSimulations(amountOfDoors, 5000, simType, False, False)
-    SilentSimulations(amountOfDoors, 10000, simType, False, False)
+    simulationTimes = [50, 100, 1000, 5000, 10000]
+    allActions, allResults, allFirstChoices = [], [], []
+    for sim in simulationTimes:
+        actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True)
+        allActions += actions
+        allResults += results
 
 def SilentSimulationMenu():
     print("Check info on types of Silent Simulation if you are struggling to understand.")
     print("You can customise the doors and the amount of simulations.")
+
     simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower()
     amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower()
     if amountOfSims == "2":
         amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True)
-    elif amountOfSims == "1":
-        amountOfSims = "Default"
     amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower()
     if amountOfDoors == "3":
         amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True)
-    elif amountOfDoors == "2":
-        amountOfDoors = 10
-    elif amountOfDoors == "1":
-        amountOfDoors = 3
-    if amountOfSims == "Default":
+    elif amountOfDoors == "2": amountOfDoors = 10
+    elif amountOfDoors == "1": amountOfDoors = 3
+    if amountOfSims == "1":
         RunDefaultSilentSimulations(simType, amountOfDoors)
     else:
         SilentSimulations(amountOfDoors, amountOfSims, simType)
 
-def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, noTable:bool=False):
-    if not noTable:
-        tableData = [allRounds, allFirstChoices, allActions, allResults]
-        PrintFunctions.PrintTable(tableData, amountOfRounds)
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):
+    tableData = [allRounds, allFirstChoices, allActions, allResults]
+    PrintFunctions.PrintTable(tableData, amountOfRounds)
     winsCount = allResults.count("Win")
     lossesCount = allResults.count("Lose")
     stayCount = allActions.count("Stay")
