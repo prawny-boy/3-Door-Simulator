@@ -31,7 +31,7 @@ def LimitedInput(choices:list=["y","n"], prompt="Pick an option:", promptseperat
             cprint(error, errorcolour, attrs=errorattrs)
     return answer
 
-def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", choiceseperator=" | ", error="Invalid. Please try again."):
+def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", choiceseperator=" | ", error="Invalid. Please try again.", returnKey:bool=False):
     cprint(prompt, "yellow", attrs=["bold"])
     for i in range(len(choices.keys())):
         print(str(list(choices.keys())[i])+choiceseperator+str(choices[list(choices.keys())[i]]))
@@ -57,9 +57,13 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
             break
         else:
             cprint(error, "red", attrs=["bold"])
+    keyAnswer = answer
     answer = choices[answer]
     cprint(f"Selected {answer}\n", "green")
-    return answer
+    if returnKey:
+        return keyAnswer
+    else:
+        return answer
 
 def RangedInput(start:int, end:int, prompt="Choose a number:", error="Invalid. Please try again."):
     cprint(prompt, "yellow", attrs=["bold"])
