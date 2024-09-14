@@ -98,7 +98,7 @@ def UserSimulation(doorNum:int):
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False):
+def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False, fileSave:bool=False):
     if simType == "always stay": actionRandomChoice = "stay"
     elif simType == "always switch": actionRandomChoice = "switch"
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
@@ -117,6 +117,8 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         allResults.append("Win" if result else "Lose")
         print(f'Progress: {round(r/simulationTimes*100, 2)}%'+'\r', end="")
     print("\n")
+    if fileSave:
+        SaveToFile(allRounds, allFirstChoices, allActions, allResults, simulationTimes)
     if not runningDefaultSim:
         if simulationTimes <= 100:
             PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
