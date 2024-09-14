@@ -52,7 +52,7 @@ def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
         finalDoor = chosenDoor
     else:
         print("Error. Type is not Switch or Stay. [GetResult]")
-    return tuple([roomDict[finalDoor] == 1, type])
+    return tuple([roomDict[finalDoor] == 1, finalDoor, type])
 
 def UserSimulation(doorNum:int):
     print("Look up the info for Manual Simulation to know how to play.")
@@ -111,7 +111,7 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         chosenDoor = random.choice(list(roomDict.keys()))
         doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
         if simType == "random choices": actionRandomChoice = random.choice(["stay", "switch"])
-        result, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
+        result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
         allFirstChoices.append(chosenDoor)
         allActions.append(action.capitalize())
         allResults.append("Win" if result else "Lose")
