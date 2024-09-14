@@ -216,6 +216,9 @@ def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:li
         for i in range(amountOfRounds):
             file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n")
 
+def SilentFileUpdate():
+    pass
+
 # Main Code
 # Menu
 print("-------------------------------------------------------------------")
@@ -227,12 +230,14 @@ while True:
     command = None
     command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "i": "Instructions/Help"}, "Enter a command:")).lower()
     if command == "play":
-        command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation"}, "Pick type of simulation:")).lower()
+        command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation", "f": "Update Files"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
             amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: (Recommended: 3)")
             UserSimulation(amountOfDoors)
         elif command == "silent simulation":
             SilentSimulationMenu()
+        elif command == "update files":
+            SilentFileUpdate()
     elif command == "customisation":
         pass
         # customisation options
