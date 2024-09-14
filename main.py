@@ -225,7 +225,6 @@ def SilentFileUpdate():
     print("Files Saved Successfully!\n")
 
 # Main Code
-# Menu
 print("-------------------------------------------------------------------")
 cprint("The 3-door Problem/Monty Hall Problem Simulator", attrs=["bold", "underline"])
 cprint("By Sean Chan", attrs=["bold"])
@@ -259,12 +258,15 @@ while True:
             continue
     elif command == "instructions/help":
         while True:
-            command = str(PrintFunctions.ListedInput({"b": "Background of the 3-Door Problem", "h": "How to Play", "p": "Previous"}, "Select a topic:")).lower()
+            command = str(PrintFunctions.ListedInput({"b": "Background of the 3-Door Problem", "h": "How to Play", "n": "Navigation Of This Program", "p": "Previous"}, "Select a topic:")).lower()
             if command == "background of the 3-door problem":
                 cprint("\nBACKGROUND\n", attrs=["bold"])
                 print("""""")
             elif command == "how to play":
                 cprint("\nHOW TO PLAY\n", attrs=["bold"])
+                print("""""")
+            elif command == "navigation of this program":
+                cprint("\nNAVIGATION\n", attrs=["bold"])
                 print("""""")
             elif command == "previous":
                 break
