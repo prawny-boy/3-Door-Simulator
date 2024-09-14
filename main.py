@@ -99,7 +99,7 @@ def UserSimulation(doorNum:int):
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def SilentSimulations(doorNum:int, simulationTimes:int):
+def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices"):
     print("Look up the info for Silent Simulation to know what this does.")
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
     allFirstChoices = []
@@ -109,7 +109,15 @@ def SilentSimulations(doorNum:int, simulationTimes:int):
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = random.choice(list(roomDict.keys()))
         doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
-        result, finalDoor, action = GetResult(random.choice(["stay", "switch"]), doorsToBeRevealed, chosenDoor, roomDict)
+        if simType == "random choices":
+            actionRandomChoice = random.choice(["stay", "switch"])
+        elif simType == "always stay":
+            actionRandomChoice = "stay"
+        elif simType == "always switch":
+            actionRandomChoice = "switch"
+        else:
+            print("Error. Type is not Switch or Stay. [SilentSimulations]")
+        result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
         allFirstChoices.append(chosenDoor)
         allActions.append(action.capitalize())
         allResults.append("Win" if result else "Lose")
@@ -124,7 +132,23 @@ def SilentSimulationMenu():
     amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower()
     if amountOfSims == "2":
         amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True)
+    elif amountOfSims == "1":
+        amountOfSims = "Default"
     amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower()
+    if amountOfDoors == "3":
+        amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True)
+    elif amountOfDoors == "2":
+        amountOfDoors = 10
+    elif amountOfDoors == "1":
+        amountOfDoors = 3
+    if amountOfSims == "Default":
+        SilentSimulations(amountOfDoors, 50, simType) # add silently option
+        SilentSimulations(amountOfDoors, 100, simType)
+        SilentSimulations(amountOfDoors, 1000, simType)
+        SilentSimulations(amountOfDoors, 5000, simType)
+        SilentSimulations(amountOfDoors, 10000, simType)
+    else:
+        SilentSimulations(amountOfDoors, amountOfSims, simType)
 
 
 def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
