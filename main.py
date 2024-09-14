@@ -210,7 +210,6 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
 
 # Main Code
 # Menu
-playingType = None
 print("-------------------------------------------------------------------")
 cprint("The 3-door Problem/Monty Hall Problem Simulator", attrs=["bold", "underline"])
 cprint("By Sean Chan", attrs=["bold"])
