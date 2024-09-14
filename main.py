@@ -99,7 +99,7 @@ def UserSimulation(doorNum:int):
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def rSilentSimulation(doorNum:int, simulationTimes:int):
+def SilentSimulations(doorNum:int, simulationTimes:int):
     print("Look up the info for Silent Simulation to know what this does.")
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
     allFirstChoices = []
@@ -116,6 +116,14 @@ def rSilentSimulation(doorNum:int, simulationTimes:int):
         print(f'Progress: {round((i+1)/simulationTimes*100, 1)}%'+'\r', end="")
     print("\n")
     PrintResults(list(i+1 for i in range(simulationTimes)), allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+
+def SilentSimulationMenu():
+    print("Check info on types of Silent Simulation if you are struggling to understand.")
+    print("You can customise the doors and the amount of simulations.")
+    simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower()
+    amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)")).lower()
+    doorNum = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)")).lower()
+    
 
 def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
     tableData = [allRounds, allFirstChoices, allActions, allResults]
@@ -164,10 +172,10 @@ while True:
     if command == "play":
         command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
-            amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: ")
+            amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: (Recommended: 3)")
             UserSimulation(amountOfDoors)
         elif command == "silent simulation":
-            rSilentSimulation(3, 10000)
+            SilentSimulationMenu()
     elif command == "customisation":
         pass
         # customisation options
