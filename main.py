@@ -207,6 +207,12 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         print(f"Losses with switch: {switchLossCount}, {switchLossCount/amountOfRounds*100}%")
         print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%")
 
+def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
+    with open(fileName, "w") as file:
+        file.write("Round,First Choice,Action,Result\n")
+        for i in range(amountOfRounds):
+            file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n")
+
 # Main Code
 # Menu
 print("-------------------------------------------------------------------")
