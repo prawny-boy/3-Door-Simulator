@@ -217,7 +217,11 @@ def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:li
             file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n")
 
 def SilentFileUpdate():
-    pass
+    SilentSimulations(3, 1000, "random choices", True, "part2_random.txt")
+    SilentSimulations(3, 1000, "always stay", True, "part3_stay.txt")
+    SilentSimulations(3, 1000, "always switch", True, "part4_switch.txt")
+    SilentSimulations(10, 1000, "random choices", True, "part5_ten_doors.txt")
+    print("Files Saved Successfully!\n")
 
 # Main Code
 # Menu
