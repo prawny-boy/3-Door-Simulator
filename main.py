@@ -102,7 +102,6 @@ def UserSimulation(doorNum:int):
 def rSilentSimulation(doorNum:int, simulationTimes:int):
     print("Look up the info for Silent Simulation to know what this does.")
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
-    print("Progress: 0%")
     allFirstChoices = []
     allActions = []
     allResults = []
@@ -114,9 +113,9 @@ def rSilentSimulation(doorNum:int, simulationTimes:int):
         allFirstChoices.append(chosenDoor)
         allActions.append(action.capitalize())
         allResults.append("Win" if result else "Lose")
-        sys.stdout.write("\033[K")
-        print(f"Progress: {i+1/simulationTimes*100}%")
-    print("")
+        print(f'Progress: {round((i+1)/simulationTimes*100, 1)}%'+'\r', end="")
+    print("\n")
+    PrintResults(list(i+1 for i in range(simulationTimes)), allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
 
 def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
     tableData = [allRounds, allFirstChoices, allActions, allResults]
@@ -168,7 +167,7 @@ while True:
             amountOfDoors = PrintFunctions.RangedInput(3, maximumAmountOfDoors, "Enter amount of doors: ")
             UserSimulation(amountOfDoors)
         elif command == "silent simulation":
-            pass
+            rSilentSimulation(3, 10000)
     elif command == "customisation":
         pass
         # customisation options
