@@ -99,7 +99,7 @@ def UserSimulation(doorNum:int):
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
 
-def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices"):
+def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", noTable:bool=False, noResults:bool=False):
     print("Look up the info for Silent Simulation to know what this does.")
     print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
     allFirstChoices = []
@@ -123,7 +123,15 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         allResults.append("Win" if result else "Lose")
         print(f'Progress: {round((i+1)/simulationTimes*100, 1)}%'+'\r', end="")
     print("\n")
-    PrintResults(list(i+1 for i in range(simulationTimes)), allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+    if not noResults:
+        PrintResults(list(i+1 for i in range(simulationTimes)), allFirstChoices, allActions, allResults, simulationTimes, extendedResults, noTable)
+
+def RunDefaultSilentSimulations(simType, amountOfDoors):
+    SilentSimulations(amountOfDoors, 50, simType, False, True)
+    SilentSimulations(amountOfDoors, 100, simType, False, False)
+    SilentSimulations(amountOfDoors, 1000, simType, False, False)
+    SilentSimulations(amountOfDoors, 5000, simType, False, False)
+    SilentSimulations(amountOfDoors, 10000, simType, False, False)
 
 def SilentSimulationMenu():
     print("Check info on types of Silent Simulation if you are struggling to understand.")
@@ -142,18 +150,14 @@ def SilentSimulationMenu():
     elif amountOfDoors == "1":
         amountOfDoors = 3
     if amountOfSims == "Default":
-        SilentSimulations(amountOfDoors, 50, simType) # add silently option
-        SilentSimulations(amountOfDoors, 100, simType)
-        SilentSimulations(amountOfDoors, 1000, simType)
-        SilentSimulations(amountOfDoors, 5000, simType)
-        SilentSimulations(amountOfDoors, 10000, simType)
+        RunDefaultSilentSimulations(simType, amountOfDoors)
     else:
         SilentSimulations(amountOfDoors, amountOfSims, simType)
 
-
-def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False):    
-    tableData = [allRounds, allFirstChoices, allActions, allResults]
-    PrintFunctions.PrintTable(tableData, amountOfRounds)
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, noTable:bool=False):
+    if not noTable:
+        tableData = [allRounds, allFirstChoices, allActions, allResults]
+        PrintFunctions.PrintTable(tableData, amountOfRounds)
     winsCount = allResults.count("Win")
     lossesCount = allResults.count("Lose")
     stayCount = allActions.count("Stay")
