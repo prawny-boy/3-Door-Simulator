@@ -232,7 +232,7 @@ cprint("Disclaimer: This was made for a school project. Do not take seriously.")
 print("-------------------------------------------------------------------\n")
 while True:
     command = None
-    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "i": "Instructions/Help"}, "Enter a command:")).lower()
+    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation"}, "Enter a command:")).lower()
     if command == "play":
         command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation", "f": "Update Files", "p": "Previous"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
@@ -255,19 +255,5 @@ while True:
             elif command == "toggle extended results":
                 extendedResults = not extendedResults
                 cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
-            elif command == "previous":
-                break
-    elif command == "instructions/help":
-        while True:
-            command = str(PrintFunctions.ListedInput({"b": "Background of the 3-Door Problem", "h": "How to Play", "n": "Navigation Of This Program", "p": "Previous"}, "Select a topic:")).lower()
-            if command == "background of the 3-door problem":
-                cprint("\nBACKGROUND\n", attrs=["bold"])
-                print("""""")
-            elif command == "how to play":
-                cprint("\nHOW TO PLAY\n", attrs=["bold"])
-                print("""""")
-            elif command == "navigation of this program":
-                cprint("\nNAVIGATION\n", attrs=["bold"])
-                print("""""")
             elif command == "previous":
                 break
