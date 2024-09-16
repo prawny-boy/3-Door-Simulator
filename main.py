@@ -3,6 +3,7 @@ import sys
 sys.dont_write_bytecode = True
 import PrintFunctions
 from termcolor import cprint
+import time
 
 # Variables
 numberOfGoodDoors = 1
@@ -25,20 +26,11 @@ def GenerateRoom(doorNum:int, goatCount:int):
         doorList.remove(goodDoor)
     return doorDict
 
-def RevealDoor(doorRevealCount:int, chosenDoor:int, roomDict:dict):
+def RevealDoor(chosenDoor:int, roomDict:dict):
     revealableDoors = list(roomDict.keys())
     revealableDoors.remove(chosenDoor)
-    doorsRevealed = []
-    for i in range(doorRevealCount):
-        while True:
-            revealed = random.choice(list(revealableDoors))
-            if roomDict[revealed] == 0:
-                break
-            else:
-                revealableDoors.remove(revealed)
-                continue
-        revealableDoors.remove(revealed)
-        doorsRevealed.append(revealed)
+    revealableDoors.remove(list(roomDict.keys())[list(roomDict.values()).index(1)]) # removes the car door
+    doorsRevealed = revealableDoors
     doorsRevealed.sort()
     return doorsRevealed
 
@@ -65,7 +57,7 @@ def UserSimulation(doorNum:int):
         cprint("#Round "+str(roundNum), "green")
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
-        doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
+        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict)
         print()
         if len(doorsToBeRevealed) > 10:
             for i in range(1, len(roomDict)+1):
@@ -109,7 +101,7 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
     for r in allRounds:
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = random.choice(list(roomDict.keys()))
-        doorsToBeRevealed = RevealDoor(doorNum-unknownDoorAmount, chosenDoor, roomDict)
+        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict)
         if simType == "random choices": actionRandomChoice = random.choice(["stay", "switch"])
         result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
         allFirstChoices.append(chosenDoor)
