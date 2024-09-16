@@ -262,15 +262,29 @@ while True:
             if command == "previous":
                 break
             elif command == "interactive simulations":
-                cprint("\nINTERACTIVE SIMULATION HELP\n", "green")
+                cprint("INTERACTIVE SIMULATION HELP\n", attrs=["bold"])
                 print("""Accessing the Interactive Simulation in the Program:
 1. Select "Play" from the main menu.
 2. Select "Interactive Simulation" from the play menu.
 3. Enter the amount of doors you want. (Recommended: 3)
 
-How to play it:
-At the start, there are x amount of doors, with each door being numbered 1 to x. One door has a car in it, and the rest have something bad - goats.
-The aim is to select the door with the car.""")
+How To Play:
+At the start, there are x amount of doors, with each door being numbered 1 to x. One door has a car in it, and the rest have something bad - Goats. The aim is to select the door with the car. You first start by selecting a door, and then the host will reveal x-2 doors that have goats in them. You then can decide to switch to the remaining door, or stay with your current door. Depending what you choose, you can win or lose. Just select 'y' to play again in the program.
+
+When you are done, select 'n' in play again and the results will be printed with statistics. See if you can find a pattern...\n""")
             elif command == "silent simulations":
-                cprint("\nSILENT SIMULATION HELP\n", "green")
-                print("""""")
+                cprint("SILENT SIMULATION HELP\n", attrs=["bold"])
+                print("""Accessing the Silent Simulation in the Program:
+1. Select "Play" from the main menu.
+2. Select "Silent Simulation" from the play menu.
+3. Enter the type of simulation you want.
+        Random Choices means that it will select randomly to do switch or stay.
+        Always stay or switch just does what it specifies, always.
+4. Enter the amount of times you want to simulate.
+        Controlled simulation simulates 100, 500, 1000, 5000, 10000 times and prints a special results table.
+        If you customise, it will ask you how many times you want.
+5. Enter the amount of doors you want to simulate with.
+        Default is 3 door, Many Doors is 10 doors.
+        If you customise, it will ask you how many doors you want to simulate with.
+
+The program will then simulate the setting silently and then print results.\n""")
