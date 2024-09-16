@@ -2,7 +2,7 @@ import random
 import sys
 sys.dont_write_bytecode = True
 import PrintFunctions
-from termcolor import cprint, colored
+from termcolor import cprint
 
 # Variables
 numberOfGoodDoors = 1
