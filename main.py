@@ -100,7 +100,8 @@ def UserSimulation(doorNum:int):
 def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False, fileSave:str=""):
     if simType == "always stay": actionRandomChoice = "stay"
     elif simType == "always switch": actionRandomChoice = "switch"
-    print(f"Simulating for {simulationTimes} times, with {doorNum} doors...")
+    print(f"Simulating for {simulationTimes} times, with {doorNum} doors. The action is {simType}.")
+    print('Progress: 0.0%'+'\r', end="")
     allFirstChoices = []
     allActions = []
     allResults = []
