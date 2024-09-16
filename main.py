@@ -123,7 +123,7 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         if simulationTimes <= 100:
             PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
         else:
-            print("The table was not printed because it was too long.")
+            print("The table was not printed because it was too long.\n")
             PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults, False)
         return
     return allActions, allResults, allFirstChoices
@@ -200,15 +200,25 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
     cprint("SUMMARY\n", attrs=["bold"])
     cprint(f"Wins with switch: {switchWinCount}")
     cprint(f"Wins with stay: {stayWinCount}\n")
-    print(f"Pr(Winning with switch): {switchWinCount/amountOfRounds*100}%")
-    print(f"Pr(Winning with stay): {stayWinCount/amountOfRounds*100}%\n")
+    print(f"Pr(Winning with switch): {round(switchWinCount/switchCount*100, 2)}%")
+    print(f"Pr(Winning with stay): {round(stayWinCount/stayCount*100, 2)}%\n")
 
     if extendedInfo:
         cprint("EXTENDED INFO\n", attrs=["bold"])
-        print(f"Wins: {winsCount}, {winsCount/amountOfRounds*100}%")
-        print(f"Losses: {lossesCount}, {lossesCount/amountOfRounds*100}%\n")
-        print(f"Losses with switch: {switchLossCount}, {switchLossCount/amountOfRounds*100}%")
-        print(f"Losses with stay: {stayLossCount}, {stayLossCount/amountOfRounds*100}%\n")
+        print(f"Wins: {winsCount}")
+        print(f"Losses: {lossesCount}")
+        print(f"Pr(Winning): {round(winsCount/amountOfRounds*100, 2)}%")
+        print(f"Pr(Losing): {round(lossesCount/amountOfRounds*100, 2)}%\n")
+        print(f"Losses with switch: {switchLossCount}")
+        print(f"Losses with stay: {stayLossCount}")
+        print(f"Pr(Losing with switch): {round(switchLossCount/switchCount*100, 2)}%")
+        print(f"Pr(Losing with stay): {round(stayLossCount/stayCount*100, 2)}%\n")
+        print(f"Rounds with switch: {switchCount}")
+        print(f"Rounds with stay: {stayCount}")
+        print(f"Pr(Winning with switch/all rounds): {round(switchWinCount/amountOfRounds*100, 2)}%")
+        print(f"Pr(Winning with stay/all rounds): {round(stayWinCount/amountOfRounds*100, 2)}%")
+        print(f"Pr(Losing with switch/all rounds): {round(switchLossCount/amountOfRounds*100, 2)}%")
+        print(f"Pr(Losing with stay/all rounds): {round(stayLossCount/amountOfRounds*100, 2)}%\n")
 
 def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
     with open(fileName, "w") as file:
