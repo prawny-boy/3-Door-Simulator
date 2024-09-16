@@ -196,12 +196,25 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
                 stayWinCount += 1
             else:
                 stayLossCount += 1
+    
+    if switchCount == 0:
+        winningWithSwitch = 0.0
+        losingWithSwitch = 0.0
+    else:
+        winningWithSwitch = round(switchWinCount/switchCount*100, 2)
+        losingWithSwitch = round(switchLossCount/switchCount*100, 2)
+    if stayCount == 0:
+        winningWithStay = 0.0
+        losingWithStay = 0.0
+    else:
+        winningWithStay = round(stayWinCount/stayCount*100, 2)
+        losingWithStay = round(stayLossCount/stayCount*100, 2)
 
     cprint("SUMMARY\n", attrs=["bold"])
     cprint(f"Wins with switch: {switchWinCount}")
     cprint(f"Wins with stay: {stayWinCount}\n")
-    print(f"Pr(Winning with switch): {round(switchWinCount/switchCount*100, 2)}%")
-    print(f"Pr(Winning with stay): {round(stayWinCount/stayCount*100, 2)}%\n")
+    print(f"Pr(Winning with switch): {winningWithSwitch}%")
+    print(f"Pr(Winning with stay): {winningWithStay}%\n")
 
     if extendedInfo:
         cprint("EXTENDED INFO\n", attrs=["bold"])
@@ -211,8 +224,8 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         print(f"Pr(Losing): {round(lossesCount/amountOfRounds*100, 2)}%\n")
         print(f"Losses with switch: {switchLossCount}")
         print(f"Losses with stay: {stayLossCount}")
-        print(f"Pr(Losing with switch): {round(switchLossCount/switchCount*100, 2)}%")
-        print(f"Pr(Losing with stay): {round(stayLossCount/stayCount*100, 2)}%\n")
+        print(f"Pr(Losing with switch): {losingWithSwitch}%")
+        print(f"Pr(Losing with stay): {losingWithStay}%\n")
         print(f"Rounds with switch: {switchCount}")
         print(f"Rounds with stay: {stayCount}")
         print(f"Pr(Winning with switch/all rounds): {round(switchWinCount/amountOfRounds*100, 2)}%")
