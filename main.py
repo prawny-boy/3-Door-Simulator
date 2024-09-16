@@ -266,11 +266,11 @@ while True:
                 print("""Accessing the Interactive Simulation in the Program:
 1. Select "Play" from the main menu.
 2. Select "Interactive Simulation" from the play menu.
-3. Enter the amount of doors you want. (Recomended: 3)
+3. Enter the amount of doors you want. (Recommended: 3)
 
 How to play it:
 At the start, there are x amount of doors, with each door being numbered 1 to x. One door has a car in it, and the rest have something bad - goats.
-The aim is to select the door with the car""")
+The aim is to select the door with the car.""")
             elif command == "silent simulations":
                 cprint("\nSILENT SIMULATION HELP\n", "green")
                 print("""""")
