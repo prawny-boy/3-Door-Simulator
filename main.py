@@ -232,7 +232,7 @@ cprint("Disclaimer: This was made for a school project. Do not take seriously.")
 print("-------------------------------------------------------------------\n")
 while True:
     command = None
-    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation"}, "Enter a command:")).lower()
+    command = str(PrintFunctions.ListedInput({"p": "Play", "c": "Customisation", "h": "How To Play"}, "Enter a command:")).lower()
     if command == "play":
         command = str(PrintFunctions.ListedInput({"i": "Interactive Simulation", "s": "Silent Simulation", "f": "Update Files", "p": "Previous"}, "Pick type of simulation:")).lower()
         if command == "interactive simulation":
@@ -257,3 +257,21 @@ while True:
                 cprint("Extended Info is now set to " + str(extendedResults) + ".\n", "green")
             elif command == "previous":
                 break
+    elif command == "how to play":
+        while True:
+            command = str(PrintFunctions.ListedInput({"i": "Interactive Simulations", "s": "Silent Simulations", "p": "Previous"}, "Enter a command:")).lower()
+            if command == "previous":
+                break
+            elif command == "interactive simulations":
+                cprint("\nINTERACTIVE SIMULATION HELP\n", "green")
+                print("""Accessing the Interactive Simulation in the Program:
+1. Select "Play" from the main menu.
+2. Select "Interactive Simulation" from the play menu.
+3. Enter the amount of doors you want. (Recomended: 3)
+
+How to play it:
+At the start, there are x amount of doors, with each door being numbered 1 to x. One door has a car in it, and the rest have something bad - goats.
+The aim is to select the door with the car""")
+            elif command == "silent simulations":
+                cprint("\nSILENT SIMULATION HELP\n", "green")
+                print("""""")
