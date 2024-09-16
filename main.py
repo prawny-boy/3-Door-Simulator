@@ -16,7 +16,6 @@ actions = []
 outcomes = []
 
 # Functions
-
 def GenerateRoom(doorNum:int, goatCount:int):
     doorDict = {i+1:0 for i in range(doorNum)}
     doorList = list(doorDict.keys())

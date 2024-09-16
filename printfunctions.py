@@ -35,6 +35,9 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
     cprint(prompt, "yellow", attrs=["bold"])
     for i in range(len(choices.keys())):
         print(str(list(choices.keys())[i])+choiceseperator+str(choices[list(choices.keys())[i]]))
+    valuesList = list(choices.values())
+    for i in range(len(valuesList)):
+        valuesList[i] = str(valuesList[i]).lower()
     numberChoices = []
     for i in range(len(choices.keys())):
         numberChoices.append(str(i+1))
@@ -43,9 +46,10 @@ def ListedInput(choices:dict={"y": "yes", "n": "no"}, prompt="Pick an option:", 
         valid = True
         if answer not in choices.keys():
             valid = False
-        if answer in choices.values():
+        if answer in valuesList:
             valid = True
-            answer = list(choices.keys())[list(choices.values()).index(answer)]
+            answerIndex = valuesList.index(answer)
+            answer = list(choices.keys())[answerIndex]
         if answer in numberChoices:
             answer = list(choices.keys())[int(answer)-1]
             valid = True
