@@ -20,7 +20,7 @@ outcomes = []
 def GenerateRoom(doorNum:int, goatCount:int):
     doorDict = {i+1:0 for i in range(doorNum)}
     doorList = list(doorDict.keys())
-    for i in range(doorNum-goatCount):
+    for _ in range(doorNum-goatCount):
         goodDoor = random.choice(doorList)
         doorDict[goodDoor] = 1
         doorList.remove(goodDoor)
@@ -29,9 +29,11 @@ def GenerateRoom(doorNum:int, goatCount:int):
 def RevealDoor(chosenDoor:int, roomDict:dict):
     revealableDoors = list(roomDict.keys())
     revealableDoors.remove(chosenDoor)
-    revealableDoors.remove(list(roomDict.keys())[list(roomDict.values()).index(1)]) # removes the car door
-    doorsRevealed = revealableDoors
-    doorsRevealed.sort()
+    if roomDict[chosenDoor] != 1:
+        revealableDoors.remove(list(roomDict.keys())[list(roomDict.values()).index(1)]) # removes the car door
+    else:
+        revealableDoors.remove(random.choice(revealableDoors))
+    doorsRevealed = sorted(revealableDoors)
     return doorsRevealed
 
 def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
