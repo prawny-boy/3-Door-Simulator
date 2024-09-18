@@ -56,7 +56,7 @@ def UserSimulation(doorNum:int):
     while True:
         roundNum += 1
         print("-"*20)
-        cprint("#Round "+str(roundNum), "green")
+        cprint("Round #"+str(roundNum), "green")
         roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
         chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
         doorsToBeRevealed = RevealDoor(chosenDoor, roomDict)
