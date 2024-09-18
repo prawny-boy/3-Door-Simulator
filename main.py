@@ -76,10 +76,15 @@ def UserSimulation(doorNum:int):
                 else:
                     print(str(i)+".\n")
         result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], f"Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
+        if action == "stay":
+            print(f"\nYou stayed with Door {finalDoor}")
+        elif action == "switch":
+            print(f"\nYou switched to Door {finalDoor}")
         if result:
-            print(f"Door {finalDoor} has the Prize! You Win!")
+            cprint(f"Door {finalDoor} has the Prize! You Win!", "green")
         else:
-            print(f"Door {finalDoor} had the Goat. Too Bad.")
+            cprint(f"Door {finalDoor} had the Goat. Too Bad.", "red")
+            print(f"The car is in Door {list(roomDict.keys())[list(roomDict.values()).index(1)]}")
         
         allFirstChoices.append(chosenDoor)
         allActions.append(action.capitalize())
