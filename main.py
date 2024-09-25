@@ -1,11 +1,10 @@
-import random
-import sys
-sys.dont_write_bytecode = True
-import PrintFunctions
-from termcolor import cprint
-import time
+import random # to randomly generate chosen doors and actions for silent sims
+import sys # to quit the code
+sys.dont_write_bytecode = True # this makes sure pycache doesnt generate
+import PrintFunctions # a different file with printing functions like tables and user error
+from termcolor import cprint # colour printing
 
-# Variables
+# Variables - These are just set now to be used later
 numberOfGoodDoors = 1
 unknownDoorAmount = 2
 amountOfDoors = 3
@@ -17,24 +16,24 @@ actions = []
 outcomes = []
 
 # Functions
-def GenerateRoom(doorNum:int, goatCount:int):
-    doorDict = {i+1:0 for i in range(doorNum)}
-    doorList = list(doorDict.keys())
-    for _ in range(doorNum-goatCount):
-        goodDoor = random.choice(doorList)
-        doorDict[goodDoor] = 1
-        doorList.remove(goodDoor)
-    return doorDict
+def GenerateRoom(doorNum:int, goatCount:int): # this generates a room dictionary with doors that have cars (1) or goats (0)
+    doorDict = {i+1:0 for i in range(doorNum)} # make a dictionary with doors 1 to x with 0 as values
+    doorList = list(doorDict.keys()) # make a list of the doors (just numbers 1 to x)
+    for _ in range(doorNum-goatCount): # loops the amount of car doors times
+        goodDoor = random.choice(doorList) # choose a random door
+        doorDict[goodDoor] = 1 # change the value of that door to 1 (car door)
+        doorList.remove(goodDoor) # remove the car door from the list
+    return doorDict # returns the doors with the goat or car on each (dict)
 
-def RevealDoor(chosenDoor:int, roomDict:dict):
-    revealableDoors = list(roomDict.keys())
-    revealableDoors.remove(chosenDoor)
-    if roomDict[chosenDoor] != 1:
+def RevealDoor(chosenDoor:int, roomDict:dict): # this reveals x minus 2 doors that have goats
+    revealableDoors = list(roomDict.keys()) # makes a list of all the doors
+    revealableDoors.remove(chosenDoor) # removes the chosen door from the list
+    if roomDict[chosenDoor] != 1: # if the chosen door is not a car
         revealableDoors.remove(list(roomDict.keys())[list(roomDict.values()).index(1)]) # removes the car door
-    else:
-        revealableDoors.remove(random.choice(revealableDoors))
-    doorsRevealed = sorted(revealableDoors)
-    return doorsRevealed
+    else: # if it is a car
+        revealableDoors.remove(random.choice(revealableDoors)) # picks a random door to remove
+    doorsRevealed = sorted(revealableDoors) # sorts the doors to be revealed
+    return doorsRevealed # returns the revealed doors
 
 def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
     if type == "switch":
@@ -127,11 +126,14 @@ def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choi
         return
     return allActions, allResults, allFirstChoices
 
-def RunDefaultSilentSimulations(simType, amountOfDoors):
+def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileName=""):
     simulationTimes = [50, 100, 1000, 5000, 10000]
     allActions, allResults, allFirstChoices = [], [], []
     for sim in simulationTimes:
-        actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True)
+        if sim == 1000 and saveToFile:
+            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True, fileName)
+        else:
+            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True)
         allActions += actions
         allResults += results
         allFirstChoices += choices
@@ -159,21 +161,37 @@ def RunDefaultSilentSimulations(simType, amountOfDoors):
 
 def SilentSimulationMenu():
     print("Check info on types of Silent Simulation if you are struggling to understand.")
-    print("You can customise the doors and the amount of simulations.")
+    silentSimType = PrintFunctions.ListedInput({"d": "Defaults", "c": "Customise"}, "Select the type of Silent Simulation:").lower()
+    if silentSimType == "customise":
+        print("You can customise the doors and the amount of simulations.")
 
-    simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower()
-    amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower()
-    if amountOfSims == "2":
-        amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True)
-    amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower()
-    if amountOfDoors == "3":
-        amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True)
-    elif amountOfDoors == "2": amountOfDoors = 10
-    elif amountOfDoors == "1": amountOfDoors = 3
-    if amountOfSims == "1":
-        RunDefaultSilentSimulations(simType, amountOfDoors)
-    else:
-        SilentSimulations(amountOfDoors, amountOfSims, simType)
+        simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower()
+        amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower()
+        if amountOfSims == "2":
+            amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True)
+        amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower()
+        if amountOfDoors == "3":
+            amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True)
+        elif amountOfDoors == "2": amountOfDoors = 10
+        elif amountOfDoors == "1": amountOfDoors = 3
+        if amountOfSims == "1":
+            RunDefaultSilentSimulations(simType, amountOfDoors)
+        else:
+            SilentSimulations(amountOfDoors, amountOfSims, simType)
+    elif silentSimType == "defaults":
+        print("All are simulated with 50, 100, 1000, 5000, 10000 rounds. Files are saved if you desire so.")
+        presetSim = PrintFunctions.ListedInput({"1": "Random Stay/Switch", "2": "Always Stay", "3": "Always Switch", "4": "Many Doors"}, "Pick the simulation you want:", choiceseperator=". ", returnKey=True).lower()
+        saveFile = PrintFunctions.ListedInput({"y": "Yes", "n": "No"}, "Do you want to save the files?", returnKey=True).lower()
+        if saveFile == "y": saveFile = True
+        else: saveFile = False
+        if presetSim == "1":
+            RunDefaultSilentSimulations("random choices", 3, saveFile, "part2_random.txt")
+        elif presetSim == "2":
+            RunDefaultSilentSimulations("always stay", 3, saveFile, "part3_stay.txt")
+        elif presetSim == "3":
+            RunDefaultSilentSimulations("always switch", 3, saveFile, "part4_switch.txt")
+        elif presetSim == "4":
+            RunDefaultSilentSimulations("always switch", 10, saveFile, "part5_ten_doors.txt")
 
 def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, table:bool=True):
     if table:
