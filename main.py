@@ -35,65 +35,65 @@ def RevealDoor(chosenDoor:int, roomDict:dict): # this reveals x minus 2 doors th
     doorsRevealed = sorted(revealableDoors) # sorts the doors to be revealed
     return doorsRevealed # returns the revealed doors
 
-def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict):
-    if type == "switch":
-        finalDoor = list(set(roomDict.keys()) - set(revealedDoors))
-        finalDoor.remove(chosenDoor)
-        finalDoor = int(finalDoor[0])
-    elif type == "stay":
-        finalDoor = chosenDoor
+def GetResult(type:str, revealedDoors:list, chosenDoor:int, roomDict:dict): # this gets the result of the simulation depending on switch or stay
+    if type == "switch": # if it is switch
+        finalDoor = list(set(roomDict.keys()) - set(revealedDoors)) # removes the revealed doors from the list of doors
+        finalDoor.remove(chosenDoor) # removes the chosen door to get the door that the user switched to
+        finalDoor = int(finalDoor[0]) # sets this door to the finaldoor variable
+    elif type == "stay": # if it is stay
+        finalDoor = chosenDoor # then set the final door to the current chosen door because it doesnt change
     else:
-        print("Error. Type is not Switch or Stay. [GetResult]")
-    return tuple([roomDict[finalDoor] == 1, finalDoor, type])
+        print("Error. Type is not Switch or Stay. [GetResult]") # error message if it is not switch or stay
+    return tuple([roomDict[finalDoor] == 1, finalDoor, type]) # returns the result (true/false) depending if the final door is == 1 (or it is the win door) and also the actualy final door, and the switch or stay
 
-def UserSimulation(doorNum:int):
+def UserSimulation(doorNum:int): # simulates using functions above for interactive with user
     print("Look up the info for Manual Simulation to know how to play.")
-    roundNum = 0
-    allFirstChoices = []
+    roundNum = 0 # sets round number to 0, this will increase as the user plays the simulation
+    allFirstChoices = [] # defining lists for results later
     allActions = []
     allResults = []
-    while True:
-        roundNum += 1
+    while True: # loop until the player wants to stop
+        roundNum += 1 # changes the round number by 1
         print("-"*20)
-        cprint("Round #"+str(roundNum), "green")
-        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
-        chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | "))
-        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict)
+        cprint("Round #"+str(roundNum), "green") # prints the round number to the user
+        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors) # generates the doors etc using the function
+        chosenDoor = int(PrintFunctions.LimitedInput(list(roomDict.keys()), "Pick a door", " | ")) # sets the chosen door to the input of the user
+        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict) # reveals door(s) to the user
         print()
-        if len(doorsToBeRevealed) > 10:
-            for i in range(1, len(roomDict)+1):
+        if len(doorsToBeRevealed) > 10: # if the length of the reveal door list (from the revealdoor function) is bigger than 10
+            for i in range(1, len(roomDict)+1): # this chunk of code just prints it as the remaining door, instead of al the revealed doors (if there is lots of doors being simulated)
                 if i not in doorsToBeRevealed and i != chosenDoor:
                     print(f"Door {i} may be the prize door.\n")
                     break
-        elif len(doorsToBeRevealed) == 1:
-            print(f"Goat is in door {doorsToBeRevealed[0]}\n")
-        else:
-            print("Goats are in doors:", end=" ")
+        elif len(doorsToBeRevealed) == 1: # if there is only one revealed door, or there are 3 doors being simulated
+            print(f"Goat is in door {doorsToBeRevealed[0]}\n") # prints the revealed door
+        else: # otherwise (2-9 revealed doors)
+            print("Goats are in doors:", end=" ") # this chunk of code just prints all the revealed goat doors seperated in commas
             for i in doorsToBeRevealed:
                 if not i == doorsToBeRevealed[-1]:
                     print(i, end=", ")
                 else:
                     print(str(i)+".\n")
-        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], f"Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict)
-        if action == "stay":
-            print(f"\nYou stayed with Door {finalDoor}")
-        elif action == "switch":
-            print(f"\nYou switched to Door {finalDoor}")
-        if result:
-            cprint(f"Door {finalDoor} has the Prize! You Win!", "green")
+        result, finalDoor, action = GetResult(PrintFunctions.LimitedInput(["stay", "switch"], f"Do you want to stay or switch:"), doorsToBeRevealed, chosenDoor, roomDict) # this gets the user input to stay or switch and puts it in the getresult function to calculate the win or lose
+        if action == "stay": # if the user stayed
+            print(f"\nYou stayed with Door {finalDoor}") # prints that the user stayed in the final door
+        elif action == "switch": # if the user switched
+            print(f"\nYou switched to Door {finalDoor}") # prints that the user switched in the final door
+        if result: # tells the user if they won or lost
+            cprint(f"Door {finalDoor} has the Prize! You Win!", "green") # win
         else:
-            cprint(f"Door {finalDoor} had the Goat. Too Bad.", "red")
-            print(f"The car is in Door {list(roomDict.keys())[list(roomDict.values()).index(1)]}")
+            cprint(f"Door {finalDoor} had the Goat. Too Bad.", "red") # lose
+            print(f"The car is in Door {list(roomDict.keys())[list(roomDict.values()).index(1)]}") # prints the prize door
         
-        allFirstChoices.append(chosenDoor)
-        allActions.append(action.capitalize())
-        allResults.append("Win" if result else "Lose")
+        allFirstChoices.append(chosenDoor) # appends the round results to the list to print later in the table (this is the chosen door at the start)
+        allActions.append(action.capitalize()) # stay or switch
+        allResults.append("Win" if result else "Lose") # win or lose
         
         print()
-        if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n":
-            break
+        if PrintFunctions.LimitedInput(["y", "n"], "Do you want to play again:") == "n": # asks if the user wants to play again
+            break # if no, break from the while true loop to print results
     print("")
-    PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults)
+    PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults) # prints a table with the results of the interactive simulation
 
 def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False, fileSave:str=""):
     if simType == "always stay": actionRandomChoice = "stay"
