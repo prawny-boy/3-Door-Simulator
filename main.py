@@ -161,8 +161,18 @@ def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileN
                     stayCount += 1
                 else:
                     switchCount += 1
-        stayPrs.append(str(round(stayWins/stayCount*100,2))+"%")
-        switchPrs.append(str(round(switchWins/switchCount*100,2))+"%")
+        
+        if switchCount == 0:
+            winningWithSwitch = 0.0
+        else:
+            winningWithSwitch = round(switchWins/switchCount*100, 2)
+        if stayCount == 0:
+            winningWithStay = 0.0
+        else:
+            winningWithStay = round(stayWins/stayCount*100, 2)
+        
+        stayPrs.append(str(winningWithStay)+"%")
+        switchPrs.append(str(winningWithSwitch)+"%")
 
     PrintFunctions.PrintTable([simulationTimes, switchPrs, stayPrs], 5, "SILENT SIMULATION RESULTS", ["Rounds", "Pr(Win with Switch)", "Pr(Win with Stay)"])
 
