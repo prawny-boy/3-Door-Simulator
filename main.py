@@ -267,19 +267,19 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         print(f"Pr(Losing with switch/all rounds): {round(switchLossCount/amountOfRounds*100, 2)}%") # prints the losing with switch percentage
         print(f"Pr(Losing with stay/all rounds): {round(stayLossCount/amountOfRounds*100, 2)}%\n") # prints the losing with stay percentage
 
-def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
-    with open(fileName, "w") as file:
-        file.truncate()
-        file.write("Round,First Choice,Action,Result\n")
-        for i in range(amountOfRounds):
-            file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n")
+def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int): # saves the parameter data to a file
+    with open(fileName, "w") as file: # opens the file
+        file.truncate() # clears the file
+        file.write("Round,First Choice,Action,Result\n") # writes the header
+        for i in range(amountOfRounds): # for each round
+            file.write(f"{allRounds[i]},{allFirstChoices[i]},{allActions[i]},{allResults[i]}\n") # writes the data
 
-def SilentFileUpdate():
-    SilentSimulations(3, 1000, "random choices", True, "part2_random.txt")
-    SilentSimulations(3, 1000, "always stay", True, "part3_stay.txt")
-    SilentSimulations(3, 1000, "always switch", True, "part4_switch.txt")
-    SilentSimulations(10, 1000, "random choices", True, "part5_ten_doors.txt")
-    print("Files Saved Successfully!\n")
+def SilentFileUpdate(): # saves to all the files
+    SilentSimulations(3, 1000, "random choices", True, "part2_random.txt") # runs the silent simulation with random choices with saving
+    SilentSimulations(3, 1000, "always stay", True, "part3_stay.txt") # runs the silent simulation with always stay with saving
+    SilentSimulations(3, 1000, "always switch", True, "part4_switch.txt") # runs the silent simulation with always switch with saving
+    SilentSimulations(10, 1000, "random choices", True, "part5_ten_doors.txt") # runs the silent simulation with random choices with saving
+    print("Files Saved Successfully!\n") # prints that the files were saved
 
 # Main Code
 print("-------------------------------------------------------------------")
