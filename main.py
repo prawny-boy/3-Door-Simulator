@@ -95,74 +95,74 @@ def UserSimulation(doorNum:int): # simulates using functions above for interacti
     print("")
     PrintResults(list(i+1 for i in range(roundNum)), allFirstChoices, allActions, allResults, roundNum, extendedResults) # prints a table with the results of the interactive simulation
 
-def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False, fileSave:str=""):
-    if simType == "always stay": actionRandomChoice = "stay"
-    elif simType == "always switch": actionRandomChoice = "switch"
-    print(f"Simulating for {simulationTimes} times, with {doorNum} doors. The action is {simType}.")
-    print('Progress: 0.0%'+'\r', end="")
-    allFirstChoices = []
-    allActions = []
-    allResults = []
-    allRounds = list(i+1 for i in range(simulationTimes))
-    for r in allRounds:
-        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors)
-        chosenDoor = random.choice(list(roomDict.keys()))
-        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict)
-        if simType == "random choices": actionRandomChoice = random.choice(["stay", "switch"])
-        result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict)
-        allFirstChoices.append(chosenDoor)
-        allActions.append(action.capitalize())
-        allResults.append("Win" if result else "Lose")
-        print(f'Progress: {round(r/simulationTimes*100, 2)}%'+'\r', end="")
+def SilentSimulations(doorNum:int, simulationTimes:int, simType:str="random choices", runningDefaultSim:bool=False, fileSave:str=""): # This function handles silent simulation, taking 5 parameters: doorNum, simulationTimes, simType, runningDefaultSim, fileSave
+    if simType == "always stay": actionRandomChoice = "stay" # if the simulation type passed into the function is always stay, change it to stay for easier use
+    elif simType == "always switch": actionRandomChoice = "switch" # if it is always switch, change it to switch for easier use
+    print(f"Simulating for {simulationTimes} times, with {doorNum} doors. The action is {simType}.") # prints what the simualtion is simulating
+    print('Progress: 0.0%'+'\r', end="") # starts the progress bar at 0 percent
+    allFirstChoices = [] # list of all first choices for table
+    allActions = [] # list of all actions
+    allResults = [] # list of all results
+    allRounds = list(i+1 for i in range(simulationTimes)) # list of all rounds 1,2,3,4...
+    for r in allRounds: # for each round in the list of rounds
+        roomDict = GenerateRoom(doorNum, doorNum-numberOfGoodDoors) # generate the room dictionary
+        chosenDoor = random.choice(list(roomDict.keys()))  # pick a random door to be chosen
+        doorsToBeRevealed = RevealDoor(chosenDoor, roomDict) # reveals doors silently
+        if simType == "random choices": actionRandomChoice = random.choice(["stay", "switch"]) # stays or switches depending on the mode, if it is random, use random.choice to pick
+        result, finalDoor, action = GetResult(actionRandomChoice, doorsToBeRevealed, chosenDoor, roomDict) # get the final results of the round
+        allFirstChoices.append(chosenDoor) # appends the round results to the list to print later in the table
+        allActions.append(action.capitalize()) # stay or switch
+        allResults.append("Win" if result else "Lose") # win or lose
+        print(f'Progress: {round(r/simulationTimes*100, 2)}%'+'\r', end="") # updates the progress bar to loop again after
     print("\n")
-    if fileSave != "":
-        SaveToFile(fileSave, allRounds, allFirstChoices, allActions, allResults, simulationTimes)
-    if not runningDefaultSim:
-        if simulationTimes <= 100:
-            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults)
+    if fileSave != "": # if the user wants to save the results (not filesave is equal to empty string)
+        SaveToFile(fileSave, allRounds, allFirstChoices, allActions, allResults, simulationTimes) # save the file using the function
+    if not runningDefaultSim: # if the user is not running the default simulation (the 100, 1000, 5000, 10000 simulations)
+        if simulationTimes <= 100: # if the simulation times is less than or equal to 100 (because table cant be too long)
+            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults) # print the results
         else:
-            print("The table was not printed because it was too long.\n")
-            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults, False)
-        return
-    return allActions, allResults, allFirstChoices
+            print("The table was not printed because it was too long.\n") # print that the table is too long to print
+            PrintResults(allRounds, allFirstChoices, allActions, allResults, simulationTimes, extendedResults, False) # just print the results not including the table (see false in the function)
+        return # ends the function by calling return
+    return allActions, allResults, allFirstChoices # returns the actions, results, and first choices to be printed in the default sim function
 
-def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileName=""):
-    simulationTimes = [50, 100, 1000, 5000, 10000]
-    allActions, allResults, allFirstChoices = [], [], []
-    for sim in simulationTimes:
-        if sim == 1000 and saveToFile:
-            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True, fileName)
+def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileName=""): # This function runs the default silent simulations for 50, 100, 1000, 10000 rounds
+    simulationTimes = [50, 100, 1000, 5000, 10000] # list of simulation times
+    allActions, allResults, allFirstChoices = [], [], [] # list of all actions, results, and first choices
+    for sim in simulationTimes: # for each simulation time count in the list
+        if sim == 1000 and saveToFile: # if the simulation count is equal to 1000 and the user wants to save
+            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True, fileName) # silent simulation with saving
         else:
-            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True)
-        allActions += actions
-        allResults += results
-        allFirstChoices += choices
-    PrintFunctions.PrintTable([list(i+1 for i in range(50)), allFirstChoices[:50], allActions[:50], allResults[:50]], 50, tableTitle="50 ROUND RESULTS TABLE")
-    print("\nThe rest were simulated silently...\n")
+            actions, results, choices = SilentSimulations(amountOfDoors, sim, simType, True) # silent simulation without saving (no filename)
+        allActions += actions # adds the actions
+        allResults += results # adds the results
+        allFirstChoices += choices # adds the first choices
+    PrintFunctions.PrintTable([list(i+1 for i in range(50)), allFirstChoices[:50], allActions[:50], allResults[:50]], 50, tableTitle="50 ROUND RESULTS TABLE") # prints the table with the 50 round
+    print("\nThe rest were simulated silently...\n") # prints that the rest were simulated silently
 
-    stayPrs, switchPrs = [], []
-    for i in range(len(simulationTimes)):
-        if not i == 0: before = simulationTimes[i-1]
-        else: before = 0
-        current = simulationTimes[i]
-        roundActions = allActions[before+1:current+before+1]
-        roundResults = allResults[before+1:current+before+1]
-        switchWins, stayWins, switchCount, stayCount = 0, 0, 0, 0
-        for s in range(len(roundActions)):
-            if roundResults[s] == "Win":
-                if roundActions[s] == "Stay":
-                    stayWins += 1
-                    stayCount += 1
-                else:
-                    switchWins += 1
-                    switchCount += 1
-            else:
-                if roundActions[s] == "Stay":
-                    stayCount += 1
-                else:
-                    switchCount += 1
+    stayPrs, switchPrs = [], [] # makes lists of stay and switch percentages
+    for i in range(len(simulationTimes)): # for each simulation time
+        if not i == 0: before = simulationTimes[i-1] # if it is not the first simulation before sets to the previous simulation
+        else: before = 0 # if it is the first simulation before sets to 0
+        current = simulationTimes[i] # sets to the current simulation times
+        roundActions = allActions[before+1:current+before+1] # checks the actions of the round
+        roundResults = allResults[before+1:current+before+1] # checks the results of the round
+        switchWins, stayWins, switchCount, stayCount = 0, 0, 0, 0 # sets switch wins, stay wins, switch count, and stay count to 0
+        for s in range(len(roundActions)): # for each round
+            if roundResults[s] == "Win": # if the result is win
+                if roundActions[s] == "Stay": # if the action is stay
+                    stayWins += 1 # adds to stay wins
+                    stayCount += 1 # adds to stay count
+                else: # if the action is switch
+                    switchWins += 1 # adds to switch wins
+                    switchCount += 1 # adds to switch count
+            else: # if the result is lose
+                if roundActions[s] == "Stay": # if the action is stay
+                    stayCount += 1 # adds to stay count
+                else: # if the action is switch
+                    switchCount += 1 # adds to switch count
         
-        if switchCount == 0:
+        if switchCount == 0: # resolving zero division error with if statements
             winningWithSwitch = 0.0
         else:
             winningWithSwitch = round(switchWins/switchCount*100, 2)
@@ -171,10 +171,10 @@ def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileN
         else:
             winningWithStay = round(stayWins/stayCount*100, 2)
         
-        stayPrs.append(str(winningWithStay)+"%")
+        stayPrs.append(str(winningWithStay)+"%") # prints the results
         switchPrs.append(str(winningWithSwitch)+"%")
 
-    PrintFunctions.PrintTable([simulationTimes, switchPrs, stayPrs], 5, "SILENT SIMULATION RESULTS", ["Rounds", "Pr(Win with Switch)", "Pr(Win with Stay)"])
+    PrintFunctions.PrintTable([simulationTimes, switchPrs, stayPrs], 5, "SILENT SIMULATION RESULTS", ["Rounds", "Pr(Win with Switch)", "Pr(Win with Stay)"]) # prints the 50, 100, 1000, 10000 round table with probabilities
 
 def SilentSimulationMenu():
     print("Check info on types of Silent Simulation if you are struggling to understand.")
