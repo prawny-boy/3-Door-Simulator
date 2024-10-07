@@ -176,32 +176,32 @@ def RunDefaultSilentSimulations(simType, amountOfDoors, saveToFile = True, fileN
 
     PrintFunctions.PrintTable([simulationTimes, switchPrs, stayPrs], 5, "SILENT SIMULATION RESULTS", ["Rounds", "Pr(Win with Switch)", "Pr(Win with Stay)"]) # prints the 50, 100, 1000, 10000 round table with probabilities
 
-def SilentSimulationMenu():
+def SilentSimulationMenu(): # this is a menu with the silent simulation options, there are 3 types of silent simulation options here
     print("Check info on types of Silent Simulation if you are struggling to understand.")
-    silentSimType = PrintFunctions.ListedInput({"d": "Defaults", "c": "Customise"}, "Select the type of Silent Simulation:").lower()
-    if silentSimType == "customise":
+    silentSimType = PrintFunctions.ListedInput({"d": "Defaults", "c": "Customise"}, "Select the type of Silent Simulation:").lower() # user input with user error handling
+    if silentSimType == "customise": # if the user wants to customise
         print("You can customise the doors and the amount of simulations.")
 
-        simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower()
-        amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower()
+        simType = str(PrintFunctions.ListedInput({"1": "Random Choices", "2": "Always Switch", "3": "Always Stay"}, "Pick type of silent simulation: (1/3 Type)")).lower() # user picking type (always stay, switch or random choices)
+        amountOfSims = str(PrintFunctions.ListedInput({"1": "Controlled (50, 100, 1000, 5000, 10000 times)", "2": "Custom Amount"}, "Pick type of silent simulation: (2/3 Simulation Times)", returnKey=True)).lower() # user inputting amount of times to be run with user error handling
         if amountOfSims == "2":
-            amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True)
-        amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower()
+            amountOfSims = PrintFunctions.RangedInput(1, 1, "Pick amount of Simulation Times:", infiniteEnd=True) # lets the user pick amount of times to be run with user error handling
+        amountOfDoors = str(PrintFunctions.ListedInput({"1": "Default (3)", "2": "Many Doors (10)", "3": "Custom"}, "Pick type of silent simulation: (3/3 Door Amount)", returnKey=True)).lower() # user inputting amount of doors with user error handling
         if amountOfDoors == "3":
-            amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True)
-        elif amountOfDoors == "2": amountOfDoors = 10
-        elif amountOfDoors == "1": amountOfDoors = 3
-        if amountOfSims == "1":
-            RunDefaultSilentSimulations(simType, amountOfDoors)
+            amountOfDoors = PrintFunctions.RangedInput(1, 1, "Pick amount of Doors:", infiniteEnd=True) # lets the user pick amount of doors with user error handling
+        elif amountOfDoors == "2": amountOfDoors = 10 # if the user picked 2, set it to 10
+        elif amountOfDoors == "1": amountOfDoors = 3 # if the user picked 1, set it to 3
+        if amountOfSims == "1": # if the user picked 1
+            RunDefaultSilentSimulations(simType, amountOfDoors) # runs the default silent simulations with 50, 100, 1000, 5000, 10000 rounds
         else:
-            SilentSimulations(amountOfDoors, amountOfSims, simType)
-    elif silentSimType == "defaults":
+            SilentSimulations(amountOfDoors, amountOfSims, simType) # runs the silent simulations with the round count
+    elif silentSimType == "defaults": # if the user wants to run defaults
         print("All are simulated with 50, 100, 1000, 5000, 10000 rounds. Files are saved if you desire so.")
-        presetSim = PrintFunctions.ListedInput({"1": "Random Stay/Switch", "2": "Always Stay", "3": "Always Switch", "4": "Many Doors"}, "Pick the simulation you want:", choiceseperator=". ", returnKey=True).lower()
-        saveFile = PrintFunctions.ListedInput({"y": "Yes", "n": "No"}, "Do you want to save the files?", returnKey=True).lower()
-        if saveFile == "y": saveFile = True
-        else: saveFile = False
-        if presetSim == "1":
+        presetSim = PrintFunctions.ListedInput({"1": "Random Stay/Switch", "2": "Always Stay", "3": "Always Switch", "4": "Many Doors"}, "Pick the simulation you want:", choiceseperator=". ", returnKey=True).lower() # asks which simulation the user wants to run
+        saveFile = PrintFunctions.ListedInput({"y": "Yes", "n": "No"}, "Do you want to save the files?", returnKey=True).lower() # asks if the user wants to save the files
+        if saveFile == "y": saveFile = True # sets save file to true if it is y
+        else: saveFile = False # sets save file to false if it is n
+        if presetSim == "1": # runs the preset simulation depending on the user input
             RunDefaultSilentSimulations("random choices", 3, saveFile, "part2_random.txt")
         elif presetSim == "2":
             RunDefaultSilentSimulations("always stay", 3, saveFile, "part3_stay.txt")
@@ -210,28 +210,28 @@ def SilentSimulationMenu():
         elif presetSim == "4":
             RunDefaultSilentSimulations("always switch", 10, saveFile, "part5_ten_doors.txt")
 
-def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, table:bool=True):
-    if table:
-        tableData = [allRounds, allFirstChoices, allActions, allResults]
-        PrintFunctions.PrintTable(tableData, amountOfRounds)
-    winsCount = allResults.count("Win")
-    lossesCount = allResults.count("Lose")
-    stayCount = allActions.count("Stay")
-    switchCount = allActions.count("Switch")
-    switchWinCount, switchLossCount, stayWinCount, stayLossCount = 0, 0, 0, 0
-    for i in range(amountOfRounds):
-        if allActions[i] == "Switch":
-            if allResults[i] == "Win":
-                switchWinCount += 1
-            else:
-                switchLossCount += 1
-        elif allActions[i] == "Stay":
-            if allResults[i] == "Win":
-                stayWinCount += 1
-            else:
-                stayLossCount += 1
+def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int, extendedInfo:bool=False, table:bool=True): # prints the results of the simulation using parameters
+    if table: # if the user wants a table
+        tableData = [allRounds, allFirstChoices, allActions, allResults] # data for the table
+        PrintFunctions.PrintTable(tableData, amountOfRounds) # prints the table
+    winsCount = allResults.count("Win") # counts the wins
+    lossesCount = allResults.count("Lose") # counts the losses
+    stayCount = allActions.count("Stay") # counts the stays
+    switchCount = allActions.count("Switch") # counts the switches
+    switchWinCount, switchLossCount, stayWinCount, stayLossCount = 0, 0, 0, 0 # sets switch wins, switch losses, stay wins, and stay losses to 0
+    for i in range(amountOfRounds): # for each round
+        if allActions[i] == "Switch": # if the action is switch
+            if allResults[i] == "Win": # if the result is win
+                switchWinCount += 1 # add 1 to switch wins
+            else: # if the result is lose
+                switchLossCount += 1 # add 1 to switch losses
+        elif allActions[i] == "Stay": # if the action is stay
+            if allResults[i] == "Win": # if the result is win
+                stayWinCount += 1 # add 1 to stay wins
+            else: # if the result is lose
+                stayLossCount += 1 # add 1 to stay losses
     
-    if switchCount == 0:
+    if switchCount == 0: # handling zero division error using if statements, setting it to 0
         winningWithSwitch = 0.0
         losingWithSwitch = 0.0
     else:
@@ -244,28 +244,28 @@ def PrintResults(allRounds:list, allFirstChoices:list, allActions:list, allResul
         winningWithStay = round(stayWinCount/stayCount*100, 2)
         losingWithStay = round(stayLossCount/stayCount*100, 2)
 
-    cprint("SUMMARY\n", attrs=["bold"])
-    cprint(f"Wins with switch: {switchWinCount}")
-    cprint(f"Wins with stay: {stayWinCount}\n")
-    print(f"Pr(Winning with switch): {winningWithSwitch}%")
-    print(f"Pr(Winning with stay): {winningWithStay}%\n")
+    cprint("SUMMARY\n", attrs=["bold"]) # prints the summary
+    cprint(f"Wins with switch: {switchWinCount}") # prints the wins with switch
+    cprint(f"Wins with stay: {stayWinCount}\n") # prints the wins with stay
+    print(f"Pr(Winning with switch): {winningWithSwitch}%") # prints the winning with switch percentage
+    print(f"Pr(Winning with stay): {winningWithStay}%\n") # prints the winning with stay percentage
 
-    if extendedInfo:
-        cprint("EXTENDED INFO\n", attrs=["bold"])
-        print(f"Wins: {winsCount}")
-        print(f"Losses: {lossesCount}")
-        print(f"Pr(Winning): {round(winsCount/amountOfRounds*100, 2)}%")
-        print(f"Pr(Losing): {round(lossesCount/amountOfRounds*100, 2)}%\n")
-        print(f"Losses with switch: {switchLossCount}")
-        print(f"Losses with stay: {stayLossCount}")
-        print(f"Pr(Losing with switch): {losingWithSwitch}%")
-        print(f"Pr(Losing with stay): {losingWithStay}%\n")
-        print(f"Rounds with switch: {switchCount}")
-        print(f"Rounds with stay: {stayCount}")
-        print(f"Pr(Winning with switch/all rounds): {round(switchWinCount/amountOfRounds*100, 2)}%")
-        print(f"Pr(Winning with stay/all rounds): {round(stayWinCount/amountOfRounds*100, 2)}%")
-        print(f"Pr(Losing with switch/all rounds): {round(switchLossCount/amountOfRounds*100, 2)}%")
-        print(f"Pr(Losing with stay/all rounds): {round(stayLossCount/amountOfRounds*100, 2)}%\n")
+    if extendedInfo: # if the user wants extended info
+        cprint("EXTENDED INFO\n", attrs=["bold"]) # prints the extended info
+        print(f"Wins: {winsCount}") # prints the wins
+        print(f"Losses: {lossesCount}") # prints the losses
+        print(f"Pr(Winning): {round(winsCount/amountOfRounds*100, 2)}%") # prints the winning percentage
+        print(f"Pr(Losing): {round(lossesCount/amountOfRounds*100, 2)}%\n") # prints the losing percentage
+        print(f"Losses with switch: {switchLossCount}") # prints the losses with switch
+        print(f"Losses with stay: {stayLossCount}") # prints the losses with stay
+        print(f"Pr(Losing with switch): {losingWithSwitch}%") # prints the losing with switch percentage
+        print(f"Pr(Losing with stay): {losingWithStay}%\n") # prints the losing with stay percentage
+        print(f"Rounds with switch: {switchCount}") # prints the rounds with switch
+        print(f"Rounds with stay: {stayCount}") # prints the rounds with stay
+        print(f"Pr(Winning with switch/all rounds): {round(switchWinCount/amountOfRounds*100, 2)}%") # prints the winning with switch percentage
+        print(f"Pr(Winning with stay/all rounds): {round(stayWinCount/amountOfRounds*100, 2)}%") # prints the winning with stay percentage
+        print(f"Pr(Losing with switch/all rounds): {round(switchLossCount/amountOfRounds*100, 2)}%") # prints the losing with switch percentage
+        print(f"Pr(Losing with stay/all rounds): {round(stayLossCount/amountOfRounds*100, 2)}%\n") # prints the losing with stay percentage
 
 def SaveToFile(fileName:str, allRounds:list, allFirstChoices:list, allActions:list, allResults:list, amountOfRounds:int):
     with open(fileName, "w") as file:
